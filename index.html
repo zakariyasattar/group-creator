@@ -100,19 +100,7 @@ function readTeachers() {
 
                 teacherNames = [];
                 var names = result.split("\n");
-                for(var i = 0; i < names.length; i++) {
-                  if(i + 1 != names.length){
-                    var x = sortNames(names[i], names[i+1]);
-
-                    if(x == -1){
-                      teacherNames.shift(names[i+1].split(","));
-                    }
-                    else if (x == 1) {
-                      teacherNames.shift(names[i].split(","));
-                    }
-                  }
-
-                }
+                teacherNames.sort();
                 showTeachers();
 
             }
