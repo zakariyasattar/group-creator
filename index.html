@@ -101,11 +101,14 @@ function readTeachers() {
                 teacherNames = [];
                 var names = result.split("\n");
                 names.sort();
+                console.log(names[1]);
                 for(var i = 0; i < names.length; i++) {
-                  if(names[i] != undefined){
+                  if(names[i] != "" && names[i] != ","){
                     teacherNames.push(names[i].split(","));
                   }
                 }
+                teacherNames.push(names[0].split(","));
+                teacherNames.push(names[1].split(","));
                 showTeachers();
 
             }
