@@ -100,19 +100,16 @@ function readTeachers() {
 
                 teacherNames = [];
                 var names = result.split("\n");
+<<<<<<< HEAD
+                names.sort();
                 for(var i = 0; i < names.length; i++) {
-                  if(i + 1 != names.length){
-                    var x = sortNames(names[i], names[i+1]);
-
-                    if(x == -1){
-                      teacherNames.shift(names[i+1].split(","));
-                    }
-                    else if (x == 1) {
-                      teacherNames.shift(names[i].split(","));
-                    }
+                  if(names[i] != undefined){
+                    teacherNames.push(names[i].split(","));
                   }
-
                 }
+=======
+                teacherNames.sort();
+>>>>>>> 1cee7b46fa302037bea3dd7a1ac826694c4dc310
                 showTeachers();
 
             }
