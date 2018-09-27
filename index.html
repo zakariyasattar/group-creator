@@ -101,7 +101,6 @@ function readTeachers() {
                 teacherNames = [];
                 var names = result.split("\n");
                 names.sort();
-                console.log(names[1]);
                 for(var i = 0; i < names.length; i++) {
                   if(names[i] != "" && names[i] != ","){
                     teacherNames.push(names[i].split(","));
