@@ -2,6 +2,9 @@
 <head>
 <title>Niles West Group Creator</title>
 
+<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+<meta content="utf-8" http-equiv="encoding">
+
 <style>
   body {
     background: cornflowerblue;
@@ -97,8 +100,18 @@ function readTeachers() {
 
                 teacherNames = [];
                 var names = result.split("\n");
-                for(var i = 0; i < names.length - 1; i++) { //last line has no data
-                    teacherNames.push(names[i].split(","));
+                for(var i = 0; i < names.length; i++) {
+                  if(i + 1 != names.length){
+                    var x = sortNames(names[i], names[i+1]);
+
+                    if(x == -1){
+                      teacherNames.push(names[i+1].split(","));
+                    }
+                    else if (x == 1) {
+                      teacherNames.push(names[i].split(","));
+                    }
+                  }
+
                 }
                 showTeachers();
 
@@ -110,6 +123,12 @@ function readTeachers() {
     }
     request.send();
 
+}
+
+function sortNames(a, b){
+  if(a < b) return -1;
+  if(a > b) return 1;
+  return 0;
 }
 
 //displays all the teachers in a select element
