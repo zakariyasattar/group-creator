@@ -100,6 +100,7 @@ function readTeachers() {
 
                 teacherNames = [];
                 var names = result.split("\n");
+              console.log(names)
                 for(var i = 0; i < names.length; i++) {
                   if(i + 1 != names.length){
                     var x = sortNames(names[i], names[i+1]);
