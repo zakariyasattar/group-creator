@@ -1,0 +1,504 @@
+<html>
+<head>
+<title>Niles West Group Creator</title>
+
+<style>
+  body {
+    background: cornflowerblue;
+    background-size: cover;
+    background-repeat: no-repeat;
+  }
+
+  .content {
+    position: absolute;
+    left: 50%;
+    right: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+  }
+
+</style>
+
+<script>
+
+//In this project, you will be finishing one method: createGroups().  To finish this method, you will need to be able to do the following:
+//- know which students need to be grouped (done for you, stored in the students array shown below)
+//- know the preferences of students (done for you, stored in the map below)
+//- know the sizes of each group (done for you in the createGroups() method)
+//- create an algorithm that groups students based on their preferences
+//- display the results
+//
+//Some quick examples of javascript code using an array and a map:
+//  var aStudent = students[0];
+//  var id = aStudent[0]; //the 5 digit id of the student
+//  var prefs = preferences[id]; //an array of ids that the studen with the gven id prefers
+//
+//Displaying your results in the html can be a little tricky.  The createGroups() method already has
+//a variable named div.  To add some simple information to display on the webpage, you could write code like this:
+//  div.innerHTML = "Hi mom<br>";
+//  div.innerHTML += "What's up";
+//
+//You are more than welcome to investigate more advanced ways to format your ouput
+
+
+//A 2D array - each row is of length 2, where index 0 is the first name, and index 1 is the last name
+var teacherNames = [];
+
+//A 2D array - each row is of length 3, where index 0 is the period, index 1 is the class code, and index 2 is the class name
+var classes = [];
+
+//A 2D array - each row is of length 4, where index 0 is the id, index 1 is the first name, index 2 is the last name, and index 3 is the email
+var students = [];
+
+//map from student ids to an array of ids the student prefers
+var preferences = {};
+
+readTeachers();
+
+
+//Example Test Cases
+//readClasses("Martha", "Lietz");
+//readStudents("Martha", "Lietz", "03");
+//readPreferences("Martha", "Lietz", "03");
+
+
+//A function that reads in all Teachers that are teaching a class
+//at Niles West this year.  Currently only prints out the results
+//to the console.  Do NOT return in this function as it makes an
+//asynchronous call to a database.
+function readTeachers() {
+
+    var request = new XMLHttpRequest();
+    request.open("POST", "http://fahrenbacher.com/groups/teachers.php");
+    request.onreadystatechange = function ()
+    {
+        if(request.readyState === 4)
+        {
+            if(request.status === 200 || request.status === 0)
+            {
+                //the result String will be in the following format:
+                //  <teacher first name>,<teacher last name>\n
+                //
+                //i.e.   Matthew,Fahrenbacher
+                //       AMBER,MOSIER
+                //
+                //Sometimes teacher names are capitalized in weird ways
+                //Sometimes the first name includes the middle initial
+                //Sometimes teachers have hyphenated names
+                //
+                //Two weird entries will be a teacher with an empty string
+                //  for both first and last names (this is for scheduled
+                //  things that are not classes), and a Teacher who has a
+                //  first name fo Niles and a last name of STAFF (similar
+                //  to the previous weird case);
+              //
+                //Also, this data is not sorted...
+                var result = request.responseText;
+
+                teacherNames = [];
+                var names = result.split("\n");
+                for(var i = 0; i < names.length - 1; i++) { //last line has no data
+                    teacherNames.push(names[i].split(","));
+                }
+                showTeachers();
+
+            }
+            else {
+                reportError("Error reading teachers");
+            }
+        }
+    }
+    request.send();
+
+}
+
+//displays all the teachers in a select element
+function showTeachers() {
+    var select = document.getElementById("teachers");
+    select.innerHTML = "";
+
+    for(var i = 0; i < teacherNames.length; i++) {
+        var option = document.createElement("option");
+        option.text = teacherNames[i][0] + " " + teacherNames[i][1];
+        select.appendChild(option);
+    }
+
+    chooseTeacher();
+}
+
+function chooseTeacher() {
+    var select = document.getElementById("teachers");
+    var index = select.selectedIndex;
+
+    readClasses(teacherNames[index][0], teacherNames[index][1]);
+}
+
+
+//A function that reads in all Class that a given teacher is teaching
+//at Niles West this year.  Currently only prints out the results
+//to the console.  Do NOT return in this function as it makes an
+//asynchronous call to a database.
+function readClasses(teacherFirstName, teacherLastName) {
+
+    var formData = new FormData();
+    formData.append("teacherFirst", teacherFirstName);
+    formData.append("teacherLast", teacherLastName);
+
+    var request = new XMLHttpRequest();
+    request.open("POST", "http://fahrenbacher.com/groups/classes.php");
+    request.onreadystatechange = function ()
+    {
+        if(request.readyState === 4)
+        {
+            if(request.status === 200 || request.status === 0)
+            {
+                //the result String will be in the following format:
+                //  <period>,<class code>,<class name>\n
+                //
+                //i.e.   02,IT2A07,Advance App Development
+                //       03,IT2C05,AP Comp Sci A
+                //
+                //Valid periods include HR, AS, BS
+                //
+                //Double period classes WILL appear twice, for example:
+                //
+                //  08,SC2P05,AP Physics C
+                //  09,SC2P05,AP Physics C
+                //
+                //Also... it might be nice to sort the data by period...
+                var result = request.responseText;
+
+                classes = [];
+                var cs = result.split("\n");
+                for(var i = 0; i < cs.length - 1; i++) { //last line has no data
+                    classes.push(cs[i].split(","));
+                }
+                showClasses();
+            }
+            else {
+                reportError("Error reading classes");
+            }
+        }
+    }
+    request.send(formData);
+}
+
+function showClasses() {
+    var select = document.getElementById("classes");
+    select.innerHTML = "";
+
+    for(var i = 0; i < classes.length; i++) {
+        var option = document.createElement("option");
+        option.text = classes[i][2] + ", Period " + classes[i][0];
+        select.appendChild(option);
+    }
+
+    chooseClass();
+}
+
+function chooseClass() {
+    var select = document.getElementById("teachers");
+    var index = select.selectedIndex;
+
+    var teacherFirstName = teacherNames[index][0];
+    var teacherLastName = teacherNames[index][1];
+
+    select = document.getElementById("classes");
+    index = select.selectedIndex;
+
+    var period = classes[index][0];
+
+    readStudents(teacherFirstName, teacherLastName, period);
+}
+
+//A function that reads in all Students that a given teacher is teaching
+//at Niles West this year in the given period.  Currently only prints out the results
+//to the console.  Do NOT return in this function as it makes an
+//asynchronous call to a database.
+function readStudents(teacherFirstName, teacherLastName, period) {
+    var formData = new FormData();
+    formData.append("teacherFirst", teacherFirstName);
+    formData.append("teacherLast", teacherLastName);
+    formData.append("period", period);
+
+    var request = new XMLHttpRequest();
+    request.open("POST", "http://fahrenbacher.com/groups/students.php");
+    request.onreadystatechange = function ()
+    {
+        if(request.readyState === 4)
+        {
+            if(request.status === 200 || request.status === 0)
+            {
+                //the result String will be in the following format:
+                //  <student id>,<student first name>,<student last name>,<student email>\n
+                var result = request.responseText;
+
+                var groupSelect = document.getElementById("studentsToGroup");
+                groupSelect.innerHTML = "";
+
+                students = [];
+                var ss = result.split("\n");
+                for(var i = 0; i < ss.length - 1; i++) { //last line has no data
+                    var stud = ss[i].split(",");
+                    students.push(stud);
+                }
+
+                for(var i = 0; i < students.length; i++) {
+                    var stud = students[i];
+
+                    option = document.createElement("option");
+                    option.value = stud[0];
+                    option.selected = true;
+                    option.text = stud[1] + " " + stud[2]
+                    groupSelect.add(option);
+                }
+
+                document.getElementById("studentCount").innerHTML = students.length;
+
+                showPreferences();
+            }
+            else {
+                reportError("Error reading students");
+            }
+        }
+    }
+    request.send(formData);
+}
+
+function showPreferences() {
+    var select = document.getElementById("teachers");
+    var index = select.selectedIndex;
+
+    var teacherFirstName = teacherNames[index][0];
+    var teacherLastName = teacherNames[index][1];
+
+    select = document.getElementById("classes");
+    index = select.selectedIndex;
+
+    var period = classes[index][0];
+
+    readPreferences(teacherFirstName, teacherLastName, period);
+}
+
+//Function that can be used to read in all preferences that students in a class
+//have recorded.  Do NOT return in this function as it makes an
+//asynchronous call to a database.
+function readPreferences(teacherFirstName, teacherLastName, period) {
+
+    var formData = new FormData();
+    formData.append("teacherFirst", teacherFirstName);
+    formData.append("teacherLast", teacherLastName);
+    formData.append("period", period);
+
+    var request = new XMLHttpRequest();
+    request.open("POST", "http://fahrenbacher.com/groups/readPreferences.php");
+    request.onreadystatechange = function ()
+    {
+        if(request.readyState === 4)
+        {
+            if(request.status === 200 || request.status === 0)
+            {
+                //the result String will be in the following format:
+                //  <student id>,<id of preferred student>,<id of preferred student>,...,<id of preferred student>\n
+                //
+                //Not all students may show up in the output (if they have selected no one and no
+                //   no one has selected them).  It will be important to have the full list of students
+                //   read in as well to get the missing students, as well as to identify names
+                var result = request.responseText;
+
+                var div = document.getElementById("preferences");
+                div.innerHTML = "";
+                preferences = {};
+
+                var ss = result.split("\n");
+                for(var i = 0; i < ss.length - 1; i++) { //last line has no data
+
+                    var data = ss[i].split(",");
+                    var chooser = data[0];
+                    data.shift(); //remove first person
+
+                    preferences[chooser] = data; //make a map from the student id to a list of ids of students they prefer
+
+                    var p = document.createElement('p');
+                    p.innerHTML = nameOfStudentWithId(chooser) + ": ";
+
+                    for(var j = 0; j < data.length; j++) {
+                        p.innerHTML += nameOfStudentWithId(data[j]);
+
+                        if(j != data.length - 1)
+                            p.innerHTML += ", ";
+                    }
+
+                    div.appendChild(p);
+                }
+            }
+            else {
+                reportError("Error reading preferences");
+            }
+        }
+    }
+    request.send(formData);
+}
+
+
+
+/********************/
+/*     TO DO        */
+/********************/
+//Useful data
+// 2D array named students - each row is a student in the class
+//                         - the columns are the id, first name, last name, and email
+// Map named preferences   - each key is the id of a student
+//                         - each value is an array of ids that the student prefers
+//                           Note: not every student will necessarially have picked people!
+function createGroups() {
+
+    //where to display your results
+    var div = document.getElementById("groups");
+
+    //this block of code determines which students should be grouped
+    //toGroup will be a subset of the full stundets array
+    //toGroups values are selected by the user interface
+    var toGroup = [];
+    select = document.getElementById("studentsToGroup");
+    for(var i = 0; i < select.length; i++) {
+        if(select.options[i].selected) {
+            toGroup.push(students[i]);
+        }
+    }
+
+    //array of how large each group should be - null if the user entered the data incorrectly
+    //the sum of all the group sizes will match the length of the students array
+    var sizes = groupSizes();
+
+    if(sizes == null)
+        return;
+
+    //Your job - group the students based on their preferences and the group sizes the teacher has selected
+
+    //This is an array.  Each group that you form should be stored in an array which is then pushed into the groups array
+    //i.e. this is really going to be a 2D array).
+    //Each row should contain the ids numbers of students in the same group
+    var groups = [];
+
+    //displays the average happiness of people in groups
+    console.log(score(groups));
+}
+
+//groups is an array of arrays (2D array) where each row is a group, and every element in a row is an id number
+//precondition - all grops are of the correct size requested by the user of the program
+function score(groups) {
+
+    var averageHappiness = 0;
+    var numStudents = 0;
+    for(var i = 0; i < groups.length; i++) {
+        var group = groups[i];
+        numStudents += group.length;
+
+        for(var j = 0; j < group.length; j++) {
+
+            var id = groups[j];
+            var prefs = preferences[id];
+
+            var count = 0;
+            for(var k = 0; k < group.length; k++) {
+                if(j != k) {
+                    if(prefs.indexOf(group[k]) != -1)
+                        count++;
+                }
+            }
+
+            //1 person group is auto happy
+            if(group.length == 1) {
+                averageHappiness += 1;
+            }
+            else {
+                var percentHappy = count / (group.length - 1);
+                averageHappiness += percentHappy;
+            }
+        }
+    }
+
+    averageHappiness /= numStudents;
+    return averageHappiness;
+}
+
+//returns the name of a student with the given id
+function nameOfStudentWithId(id) {
+    for(var i = 0; i < students.length; i++) {
+        if(students[i][0] == id)
+            return students[i][1] + " " + students[i][2];
+    }
+
+    return id;
+}
+
+//reads the size of groups that the user has selected to create
+function groupSizes() {
+    var input = document.getElementById("sizes").value;
+
+    if(input == "") {
+        reportError("Make sure you enterd the desired group sizes!");
+        return null;
+    }
+
+    var split = input.split(",");
+
+    var sizes = [];
+    for(var i = 0; i < split.length; i++) {
+        sizes.push(parseInt(split[i]));
+    }
+
+    var count = 0;
+    for(var i = 0; i < sizes.length; i++) {
+        count += sizes[i];
+    }
+
+    if(count != students.length) {
+        reportError("The sum of your group sizes is " + count + ", but there are " + students.length + " students in your class!");
+        return null;
+    }
+
+    return sizes;
+}
+
+function reportError(error) {
+    alert(error);
+}
+</script>
+
+</head>
+
+<body>
+
+  <style>
+        @font-face { font-family: Circular; src: url('CIRCULAR.TTF'); }
+        h1 {
+           font-family: Circular
+        }
+  </style>
+
+
+<center><h1>Niles West Group Creator</h1></center>
+
+
+<p style="font-family: Circular;">Select Teacher: <select  style="font-family: Circular;" id="teachers" onchange="chooseTeacher()"></select><br></select><br>
+Select Course: <select style="font-family: Circular;" id="classes" onchange="chooseClass()"></select><br></select><br>
+Total Student Count: <span  style="font-family: Circular;" id="studentCount"></span><br></p>
+
+<p style="font-family: Circular;">Desired Group Sizes (Separated by commas): <input type="text" id="sizes" style="font-family: Circular; font-size: 15;"></input><p>
+<p style="font-family: Circular;">Students To Group:<br> <select style="font-family: Circular;" multiple id="studentsToGroup"></select><br></p>
+<button style="font-family: Circular;" onclick="createGroups()">Create Groups</button><br><br>
+
+<u style="font-family: Circular;">Student Preferences</u><br>
+<div  style="font-family: Circular;" id="preferences">
+</div><br><br>
+
+<u style="font-family: Circular;" >Groups</u><br>
+<div style="font-family: Circular;" id="groups">
+
+</div>
+
+</body>
+
+</html>
