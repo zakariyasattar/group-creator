@@ -101,6 +101,7 @@ function readTeachers() {
                 teacherNames = [];
                 var names = result.split("\n");
 <<<<<<< HEAD
+<<<<<<< HEAD
                 names.sort();
                 for(var i = 0; i < names.length; i++) {
                   if(names[i] != undefined){
@@ -110,6 +111,9 @@ function readTeachers() {
 =======
                 teacherNames.sort();
 >>>>>>> 1cee7b46fa302037bea3dd7a1ac826694c4dc310
+=======
+                teacherNames.sort();
+>>>>>>> 590825e5725a881e4c247efaee28b486923c1df7
                 showTeachers();
 
             }
@@ -261,6 +265,7 @@ function readStudents(teacherFirstName, teacherLastName, period) {
 
                 for(var i = 0; i < students.length; i++) {
                     var stud = students[i];
+                  students.sort()
 
                     option = document.createElement("option");
                     option.value = stud[0];
