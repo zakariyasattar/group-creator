@@ -5,22 +5,6 @@
 <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
 <meta content="utf-8" http-equiv="encoding">
 
-<style>
-  body {
-    background: cornflowerblue;
-    background-size: cover;
-    background-repeat: no-repeat;
-  }
-
-  .content {
-    position: absolute;
-    left: 50%;
-    right: 50%;
-    -webkit-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
-  }
-
-</style>
 
 <script>
 
@@ -101,7 +85,7 @@ function readTeachers() {
                 teacherNames = [];
                 var names = result.split("\n");
                 names.sort();
-                
+
                 for(var i = 0; i < names.length; i++) {
                   if(names[i] != "" && names[i] != ","){
                     teacherNames.push(names[i].split(","));
@@ -494,26 +478,96 @@ function reportError(error) {
   </style>
 
 
-<center><h1>Niles West Group Creator</h1></center>
+<center><h1 style="font-family: Circular; color: white;">Niles West Group Creator</h1></center>
+<div class="content">
+  <div class="first">
+    <p style="font-family: Circular;">Select Teacher: <select  style="font-family: Circular;" id="teachers" onchange="chooseTeacher()"></select><br></select><br>
+    Select Course: <select style="font-family: Circular;" id="classes" onchange="chooseClass()"></select><br></select><br>
+    Total Student Count: <span  style="font-family: Circular;" id="studentCount"></span><br></p>
+  </div>
+  <div class="second">
+    <p style="font-family: Circular;">Desired Group Sizes (Separated by commas): <br/><input type="text" id="sizes" style="font-family: Circular; font-size: 15;"></input><p>
+    <p style="font-family: Circular;">Students To Group:<br><select style="font-family: Circular; border: none" multiple id="studentsToGroup"></select><br></p>
+    <button style="font-family: Circular;" onclick="createGroups()">Create Groups</button><br><br>
+
+    <br><br>
+  </div>
 
 
-<p style="font-family: Circular;">Select Teacher: <select  style="font-family: Circular;" id="teachers" onchange="chooseTeacher()"></select><br></select><br>
-Select Course: <select style="font-family: Circular;" id="classes" onchange="chooseClass()"></select><br></select><br>
-Total Student Count: <span  style="font-family: Circular;" id="studentCount"></span><br></p>
+</div>
 
-<p style="font-family: Circular;">Desired Group Sizes (Separated by commas): <input type="text" id="sizes" style="font-family: Circular; font-size: 15;"></input><p>
-<p style="font-family: Circular;">Students To Group:<br> <select style="font-family: Circular;" multiple id="studentsToGroup"></select><br></p>
-<button style="font-family: Circular;" onclick="createGroups()">Create Groups</button><br><br>
+</div>
 
-<u style="font-family: Circular;">Student Preferences</u><br>
-<div  style="font-family: Circular;" id="preferences">
-</div><br><br>
+<br/>
+<br/>
+<center><div class="vertical_line"></div></center>
 
-<u style="font-family: Circular;" >Groups</u><br>
-<div style="font-family: Circular;" id="groups">
+  <div class="after">
+    <p style="font-family: Circular;" >Groups</p><br>
+    <p style="font-family: Circular;">Student Preferences</p><br>
+    <div id="preferences">
+    </div>
+  </div>
 
 </div>
 
 </body>
+
+<style>
+  .preferences {
+    overflow: hidden;
+    float: right;
+  }
+  body {
+    background: #4096ee;
+    background: -moz-linear-gradient(left, #4096ee 0%, #a82d97 88%);
+    background: -webkit-linear-gradient(left, #4096ee 0%,#a82d97 88%);
+    background: linear-gradient(to right, #4096ee 0%,#a82d97 88%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4096ee', endColorstr='#a82d97',GradientType=1 );
+  }
+
+  .vertical_line{
+    height:350px;
+    width:1px;
+    background: white;
+    border: none;
+    width: 1;
+    position: relative;
+    top: 100px;
+    right: 300px;
+    overflow: hidden;
+  }
+
+  .content {
+    overflow: hidden;
+    float: left;
+    width: 47.5%;
+    position: relative;
+    top: 175px;
+    color: black;
+  }
+
+  .content .second{
+    overflow: hidden;
+    float: right;
+
+  }
+
+  .content .first{
+    overflow: hidden;
+    float: left;
+    float: top;
+  }
+  .after {
+    overflow: hidden;
+    color: white;
+    position: relative;
+    top: -400px;
+    float: right;
+  }
+
+
+</style>
+
 
 </html>
