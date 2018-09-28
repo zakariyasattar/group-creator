@@ -283,6 +283,7 @@ function showPreferences() {
 //have recorded.  Do NOT return in this function as it makes an
 //asynchronous call to a database.
 function readPreferences(teacherFirstName, teacherLastName, period) {
+  var  counter = 0;
 
     var formData = new FormData();
     formData.append("teacherFirst", teacherFirstName);
@@ -319,6 +320,14 @@ function readPreferences(teacherFirstName, teacherLastName, period) {
                     preferences[chooser] = data; //make a map from the student id to a list of ids of students they prefer
 
                     var p = document.createElement('p');
+
+                    if(counter == ss.length){
+                      counter = 0;
+                    }
+                    else{
+                      document.write("\n");
+                      counter++;
+                    }
                     p.innerHTML = nameOfStudentWithId(chooser) + ": ";
 
 
@@ -527,7 +536,7 @@ function reportError(error) {
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4096ee', endColorstr='#a82d97',GradientType=1 );
   }
 
-  @media only screen and (max-width: 800) {
+  @media only screen and (max-width: 900px) {
   /* For tablets: */
   .vertical_line{
     height:350px;
