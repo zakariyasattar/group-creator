@@ -253,7 +253,6 @@ function readStudents(teacherFirstName, teacherLastName, period) {
                 }
 
                 document.getElementById("studentCount").innerHTML = students.length;
-
                 showPreferences();
             }
             else {
@@ -283,6 +282,7 @@ function showPreferences() {
 //have recorded.  Do NOT return in this function as it makes an
 //asynchronous call to a database.
 function readPreferences(teacherFirstName, teacherLastName, period) {
+  var  counter = 0;
 
     var formData = new FormData();
     formData.append("teacherFirst", teacherFirstName);
@@ -319,7 +319,16 @@ function readPreferences(teacherFirstName, teacherLastName, period) {
                     preferences[chooser] = data; //make a map from the student id to a list of ids of students they prefer
 
                     var p = document.createElement('p');
+
+                    if(counter == ss.length){
+                      counter = 0;
+                    }
+                    else{
+                      document.write("\n");
+                      counter++;
+                    }
                     p.innerHTML = nameOfStudentWithId(chooser) + ": ";
+
 
                     for(var j = 0; j < data.length; j++) {
                         p.innerHTML += nameOfStudentWithId(data[j]);
@@ -437,7 +446,7 @@ function groupSizes() {
     var input = document.getElementById("sizes").value;
 
     if(input == "") {
-        reportError("Make sure you enterd the desired group sizes!");
+        reportError("Make sure you entered the desired group sizes!");
         return null;
     }
 
@@ -525,6 +534,49 @@ function reportError(error) {
     background: linear-gradient(to right, #4096ee 0%,#a82d97 88%);
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4096ee', endColorstr='#a82d97',GradientType=1 );
   }
+
+  @media only screen and (max-width: 900px) {
+  /* For tablets: */
+  .vertical_line{
+    height:350px;
+    width:1px;
+    background: white;
+    border: none;
+    width: 1;
+    position: relative;
+    top: 100px;
+    right: 300px;
+    overflow: hidden;
+  }
+
+  .content {
+    overflow: hidden;
+    float: left;
+    width: 47.5%;
+    position: relative;
+    top: 175px;
+    color: black;
+  }
+
+  .content .second{
+    overflow: hidden;
+    float: left;
+
+  }
+
+  .content .first{
+    overflow: hidden;
+    float: left;
+    float: top;
+  }
+  .after {
+    overflow: hidden;
+    color: white;
+    position: relative;
+    top: -400px;
+    float: right;
+  }
+}
 
   .vertical_line{
     height:350px;
