@@ -244,7 +244,7 @@ function readStudents(teacherFirstName, teacherLastName, period) {
 
                 for(var i = 0; i < students.length; i++) {
                     var stud = students[i];
-
+stud.sort();
                     option = document.createElement("option");
                     option.value = stud[0];
                     option.selected = true;
