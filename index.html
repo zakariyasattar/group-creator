@@ -244,6 +244,7 @@ function readStudents(teacherFirstName, teacherLastName, period) {
 
                 for(var i = 0; i < students.length; i++) {
                     var stud = students[i];
+
                     option = document.createElement("option");
                     option.value = stud[0];
                     option.selected = true;
@@ -551,7 +552,7 @@ function reportError(error) {
 
   .content .second{
     overflow: hidden;
-    float: right;
+    float: left;
 
   }
 
