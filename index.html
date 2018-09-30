@@ -321,7 +321,7 @@ function readPreferences(teacherFirstName, teacherLastName, period) {
 
                     var p = document.createElement('p');
 
-                    p.innerHTML = nameOfStudentWithId(chooser) + ": ";
+                    p.innerHTML = nameOfStudentWithId(chooser) + ":" ;
 
 
                     for(var j = 0; j < data.length; j++) {
@@ -468,6 +468,13 @@ function reportError(error) {
     alert(error);
 }
 </script>
+<script>
+  function after(){
+    document.getElementById('after').innerHTML = '';
+    document.getElementById('after').innerHTML += '<p style="font-family: Circular; font-size: 25px;">Groups:</p>';
+    ("#tempDiv").empty()
+  }
+</script>
 
 </head>
 
@@ -491,28 +498,30 @@ function reportError(error) {
   <div class="second">
     <p style="font-family: Circular;">Desired Group Sizes (Separated by commas): <br/><input type="text" id="sizes" style="font-family: Circular; font-size: 15;"></input><p>
     <p style="font-family: Circular;">Students To Group:<br><select style="font-family: Circular; border: none" multiple id="studentsToGroup"></select><br></p>
-    <button style="font-family: Circular;" onclick="createGroups()">Create Groups</button><br><br>
+    <button id="create" style="font-family: Circular;" onclick="createGroups();after()">Create Groups</button><br><br>
 
     <br><br>
   </div>
 
-
 </div>
 
-</div>
+
 
 <br/>
 <br/>
 <center><div class="vertical_line"></div></center>
 
-  <div class="after">
-    <p style="font-family: Circular;" >Groups</p><br>
-    <p style="font-family: Circular;">Student Preferences</p><br>
-    <div id="preferences">
-    </div>
+<div id="after">
+  <p style="font-family: Circular;">Student Preferences</p><br>
+  <div id="preferences">
   </div>
 
 </div>
+
+  </div>
+
+</div>
+
 
 </body>
 
@@ -584,12 +593,34 @@ function reportError(error) {
     float: left;
     float: top;
   }
-  .after {
+  #after {
     overflow: hidden;
     color: white;
+    left: 60%;
+    bottom: 350px;
     position: relative;
-    top: -400px;
-    float: right;
+    font-size: 25px;
+  }
+
+  #create {
+    width: 50%;
+    background: white;
+    border: none;
+    color: black;
+
+    -webkit-transition: all 0.7s ease-in-out;
+    -moz-transition: all 0.7s ease-in-out;
+    -o-transition: all 0.7s ease-in-out;
+    transition: all 0.7s ease-in-out;
+  }
+  #create:hover {
+    background: dodgerblue;
+    cursor: pointer;
+
+    -webkit-transition: all 0.4s ease-in-out;
+    -moz-transition: all 0.4s ease-in-out;
+    -o-transition: all 0.4s ease-in-out;
+    transition: all 0.4s ease-in-out;
   }
 
 
