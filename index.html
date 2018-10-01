@@ -237,6 +237,7 @@ function readStudents(teacherFirstName, teacherLastName, period) {
 
                 students = [];
                 var ss = result.split("\n");
+
                 for(var i = 0; i < ss.length - 1; i++) { //last line has no data
                     var stud = ss[i].split(",");
                     students.push(stud);
@@ -250,7 +251,9 @@ function readStudents(teacherFirstName, teacherLastName, period) {
                     option.selected = true;
                     option.text = stud[1] + " " + stud[2]
                     groupSelect.add(option);
+                    stud.sort();
                 }
+                //groupSelect.add(sortNames());
 
                 document.getElementById("studentCount").innerHTML = students.length;
 
@@ -330,7 +333,6 @@ function readPreferences(teacherFirstName, teacherLastName, period) {
                         if(j != data.length - 1)
                             p.innerHTML += ", ";
                     }
-
                     div.appendChild(p);
                 }
             }
@@ -339,11 +341,14 @@ function readPreferences(teacherFirstName, teacherLastName, period) {
             }
         }
     }
+
     request.send(formData);
 }
 
 
-
+function getPersonByID(row) {
+  return students[row][1] + students[row][2] ;
+}
 /********************/
 /*     TO DO        */
 /********************/
@@ -364,6 +369,7 @@ function createGroups() {
     var toGroup = [];
     select = document.getElementById("studentsToGroup");
     for(var i = 0; i < select.length; i++) {
+      console.log(nameOfStudentWithId(select[i]));
         if(select.options[i].selected) {
             toGroup.push(students[i]);
         }
@@ -472,7 +478,19 @@ function reportError(error) {
   function after(){
     document.getElementById('after').innerHTML = '';
     document.getElementById('after').innerHTML += '<p style="font-family: Circular; font-size: 25px;">Groups:</p>';
+
+
+    console.log(test);
     ("#tempDiv").empty()
+
+  }
+
+  function sortNames(){
+    var test =[];
+    for(var i = 0; i < students.length; i++){
+      test.unshift(getPersonByID(i));
+    }
+    test.sort();
   }
 </script>
 
