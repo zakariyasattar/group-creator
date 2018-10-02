@@ -373,7 +373,6 @@ function createGroups() {
     var toGroup = [];
     select = document.getElementById("studentsToGroup");
     for(var i = 0; i < select.length; i++) {
-      console.log(nameOfStudentWithId(select[i]));
         if(select.options[i].selected) {
             toGroup.push(students[i]);
         }
@@ -387,6 +386,11 @@ function createGroups() {
         return;
 
     //Your job - group the students based on their preferences and the group sizes the teacher has selected
+    for(var i = 0; i < students.length; i++){
+      var studentID = students[i][0];
+
+
+    }
 
     //This is an array.  Each group that you form should be stored in an array which is then pushed into the groups array
     //i.e. this is really going to be a 2D array).
@@ -555,12 +559,13 @@ function reportError(error) {
     float: right;
   }
   body {
-    overflow: hidden;
     background: #4096ee;
     background: -moz-linear-gradient(left, #4096ee 0%, #a82d97 88%);
     background: -webkit-linear-gradient(left, #4096ee 0%,#a82d97 88%);
     background: linear-gradient(to right, #4096ee 0%,#a82d97 88%);
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4096ee', endColorstr='#a82d97',GradientType=1 );
+    overflow-y: scroll;
+    overflow-x: hidden;
   }
 
   @media only screen and (max-width: 700px) {
@@ -585,7 +590,6 @@ function reportError(error) {
   }
 
 }
-
   .vertical_line{
     height:350px;
     width:1px;
@@ -610,11 +614,13 @@ function reportError(error) {
   .content .second{
     overflow: hidden;
     float: right;
+    position: relative;
 
   }
 
   .content .first{
     overflow: hidden;
+
     float: left;
     float: top;
   }
@@ -625,8 +631,8 @@ function reportError(error) {
     bottom: 350px;
     position: relative;
     font-size: 25px;
+    overflow: auto;
   }
-
   #create {
     width: 50%;
     background: white;
