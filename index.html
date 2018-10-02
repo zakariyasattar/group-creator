@@ -251,7 +251,6 @@ function readStudents(teacherFirstName, teacherLastName, period) {
                     option.selected = true;
                     option.text = stud[1] + " " + stud[2]
                     groupSelect.add(option);
-                    stud.sort();
                 }
                 //groupSelect.add(sortNames());
 
@@ -324,11 +323,14 @@ function readPreferences(teacherFirstName, teacherLastName, period) {
 
                     var p = document.createElement('p');
 
-                    p.innerHTML = nameOfStudentWithId(chooser) + ":" ;
-
+                    p.innerHTML = nameOfStudentWithId(chooser) + '<span>: </span><br>' ;
 
                     for(var j = 0; j < data.length; j++) {
-                        p.innerHTML += nameOfStudentWithId(data[j]);
+                      var sss = nameOfStudentWithId(data[j]);
+
+                      p.innerHTML += sss;
+
+
 
                         if(j != data.length - 1)
                             p.innerHTML += ", ";
@@ -341,6 +343,7 @@ function readPreferences(teacherFirstName, teacherLastName, period) {
             }
         }
     }
+    document.getElementById('preferences').style.cssText = 'margin-right:1250px; font-family: CIRCULAR;';
 
     request.send(formData);
 }
@@ -530,7 +533,7 @@ function reportError(error) {
 <center><div class="vertical_line"></div></center>
 
 <div id="after">
-  <p style="font-family: Circular;">Student Preferences</p><br>
+  <p style="font-family: Circular; color: whitesmoke; text-decoration: underline;">Student Preferences:</p>
   <div id="preferences">
   </div>
 
