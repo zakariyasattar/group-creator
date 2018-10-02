@@ -6,6 +6,7 @@
 <meta content="utf-8" http-equiv="encoding">
 
 
+
 <script>
 
 //In this project, you will be finishing one method: createGroups().  To finish this method, you will need to be able to do the following:
@@ -343,7 +344,7 @@ function readPreferences(teacherFirstName, teacherLastName, period) {
             }
         }
     }
-    document.getElementById('preferences').style.cssText = 'margin-right:1000px; font-family: CIRCULAR;';
+    document.getElementById('preferences').style.cssText = 'margin-right:900px; font-family: CIRCULAR;';
 
     request.send(formData);
 }
@@ -412,11 +413,13 @@ function score(groups) {
             var prefs = preferences[id];
 
             var count = 0;
-            for(var k = 0; k < group.length; k++) {
-                if(j != k) {
-                    if(prefs.indexOf(group[k]) != -1)
-                        count++;
-                }
+            if(prefs != undefine){
+              for(var k = 0; k < group.length; k++) {
+                  if(j != k) {
+                      if(prefs.indexOf(group[k]) != -1)
+                          count++;
+                  }
+              }
             }
 
             //1 person group is auto happy
@@ -552,6 +555,7 @@ function reportError(error) {
     float: right;
   }
   body {
+    overflow: hidden;
     background: #4096ee;
     background: -moz-linear-gradient(left, #4096ee 0%, #a82d97 88%);
     background: -webkit-linear-gradient(left, #4096ee 0%,#a82d97 88%);
