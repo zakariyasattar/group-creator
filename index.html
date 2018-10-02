@@ -237,6 +237,7 @@ function readStudents(teacherFirstName, teacherLastName, period) {
 
                 students = [];
                 var ss = result.split("\n");
+
                 for(var i = 0; i < ss.length - 1; i++) { //last line has no data
                     var stud = ss[i].split(",");
                     students.push(stud);
@@ -251,6 +252,7 @@ function readStudents(teacherFirstName, teacherLastName, period) {
                     option.text = stud[1] + " " + stud[2]
                     groupSelect.add(option);
                 }
+                //groupSelect.add(sortNames());
 
                 document.getElementById("studentCount").innerHTML = students.length;
 
@@ -321,11 +323,14 @@ function readPreferences(teacherFirstName, teacherLastName, period) {
 
                     var p = document.createElement('p');
 
-                    p.innerHTML = nameOfStudentWithId(chooser) + ": ";
-
+                    p.innerHTML = nameOfStudentWithId(chooser) + '<span>: </span><br>' ;
 
                     for(var j = 0; j < data.length; j++) {
-                        p.innerHTML += nameOfStudentWithId(data[j]);
+                      var sss = nameOfStudentWithId(data[j]);
+
+                      p.innerHTML += sss;
+
+
 
                         if(j != data.length - 1)
                             p.innerHTML += ", ";
@@ -338,11 +343,15 @@ function readPreferences(teacherFirstName, teacherLastName, period) {
             }
         }
     }
+    document.getElementById('preferences').style.cssText = 'margin-right:1000px; font-family: CIRCULAR;';
+
     request.send(formData);
 }
 
 
-
+function getPersonByID(row) {
+  return students[row][1] + students[row][2] ;
+}
 /********************/
 /*     TO DO        */
 /********************/
@@ -363,6 +372,7 @@ function createGroups() {
     var toGroup = [];
     select = document.getElementById("studentsToGroup");
     for(var i = 0; i < select.length; i++) {
+      console.log(nameOfStudentWithId(select[i]));
         if(select.options[i].selected) {
             toGroup.push(students[i]);
         }
@@ -467,6 +477,25 @@ function reportError(error) {
     alert(error);
 }
 </script>
+<script>
+  function after(){
+    document.getElementById('after').innerHTML = '';
+    document.getElementById('after').innerHTML += '<p style="font-family: Circular; font-size: 25px;">Groups:</p>';
+
+
+    console.log(test);
+    ("#tempDiv").empty()
+
+  }
+
+  function sortNames(){
+    var test =[];
+    for(var i = 0; i < students.length; i++){
+      test.unshift(getPersonByID(i));
+    }
+    test.sort();
+  }
+</script>
 
 </head>
 
@@ -490,28 +519,30 @@ function reportError(error) {
   <div class="second">
     <p style="font-family: Circular;">Desired Group Sizes (Separated by commas): <br/><input type="text" id="sizes" style="font-family: Circular; font-size: 15;"></input><p>
     <p style="font-family: Circular;">Students To Group:<br><select style="font-family: Circular; border: none" multiple id="studentsToGroup"></select><br></p>
-    <button style="font-family: Circular;" onclick="createGroups()">Create Groups</button><br><br>
+    <button id="create" style="font-family: Circular;" onclick="createGroups();after()">Create Groups</button><br><br>
 
     <br><br>
   </div>
 
-
 </div>
 
-</div>
+
 
 <br/>
 <br/>
 <center><div class="vertical_line"></div></center>
 
-  <div class="after">
-    <p style="font-family: Circular;" >Groups</p><br>
-    <p style="font-family: Circular;">Student Preferences</p><br>
-    <div id="preferences">
-    </div>
+<div id="after">
+  <p style="font-family: Circular; color: whitesmoke; text-decoration: underline;">Student Preferences:</p>
+  <div id="preferences">
   </div>
 
 </div>
+
+  </div>
+
+</div>
+
 
 </body>
 
@@ -534,6 +565,7 @@ function reportError(error) {
   .content .second{
     right: 200px;
     position: relative;
+    overflow: auto;
   }
 
   .vertical_line{
@@ -545,7 +577,7 @@ function reportError(error) {
     position: relative;
     top: 100px;
     right: 300px;
-    overflow: hidden;
+    overflow: auto;
   }
 
 }
@@ -582,12 +614,34 @@ function reportError(error) {
     float: left;
     float: top;
   }
-  .after {
+  #after {
     overflow: hidden;
     color: white;
+    left: 60%;
+    bottom: 350px;
     position: relative;
-    top: -400px;
-    float: right;
+    font-size: 25px;
+  }
+
+  #create {
+    width: 50%;
+    background: white;
+    border: none;
+    color: black;
+
+    -webkit-transition: all 0.7s ease-in-out;
+    -moz-transition: all 0.7s ease-in-out;
+    -o-transition: all 0.7s ease-in-out;
+    transition: all 0.7s ease-in-out;
+  }
+  #create:hover {
+    background: dodgerblue;
+    cursor: pointer;
+
+    -webkit-transition: all 0.4s ease-in-out;
+    -moz-transition: all 0.4s ease-in-out;
+    -o-transition: all 0.4s ease-in-out;
+    transition: all 0.4s ease-in-out;
   }
 
 
