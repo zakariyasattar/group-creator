@@ -414,7 +414,7 @@ function score(groups) {
 
         for(var j = 0; j < group.length; j++) {
 
-            var id = groups[j];
+            var id = group[j];
             var prefs = preferences[id];
 
             var count = 0;
@@ -488,7 +488,7 @@ function reportError(error) {
 <script>
 
   function sortNames(){
-    var test =[];
+    var test = [];
     for(var i = 0; i < students.length; i++){
       test.unshift(getPersonByID(i));
     }
@@ -518,7 +518,7 @@ function reportError(error) {
   <div class="second">
     <p style="font-family: Circular;">Desired Group Sizes (Separated by commas): <br/><input type="text" id="sizes" style="font-family: Circular; font-size: 15;"></input><p>
     <p style="font-family: Circular;">Students To Group:<br><select style="font-family: Circular; border: none" multiple id="studentsToGroup"></select><br></p>
-    <a href="#popup1"><button id="create" style="font-family: Circular;" onclick="createGroups())">Create Groups</button></a><br><br>
+    <center><a href="#popup1"><button id="create" style="font-family: Circular;" onclick="createGroups())">Create Groups</button></a><br><br></center>
 
     <br><br>
   </div>
@@ -648,10 +648,16 @@ function reportError(error) {
     overflow: auto;
   }
   #create {
-    width: 50%;
+    width: 100%;
     background: white;
+    bottom: -50px;
+    height: 20px;
+    border-radius: 5px;
     border: none;
+    float: right;
+    position: relative;
     color: black;
+    background: cornflowerblue;
 
     -webkit-transition: all 0.7s ease-in-out;
     -moz-transition: all 0.7s ease-in-out;
