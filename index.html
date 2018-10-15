@@ -388,6 +388,7 @@ function createGroups() {
     //Your job - group the students based on their preferences and the group sizes the teacher has selected
     for(var i = 0; i < students.length; i++){
       var studentID = students[i][0];
+      preferences[studentID][]
 
 
     }
@@ -408,7 +409,7 @@ function score(groups) {
     var averageHappiness = 0;
     var numStudents = 0;
     for(var i = 0; i < groups.length; i++) {
-        var group = groups[i];
+        var group = group[i];
         numStudents += group.length;
 
         for(var j = 0; j < group.length; j++) {
