@@ -2,11 +2,6 @@
 <head>
 <title>Niles West Group Creator</title>
 
-<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
-<meta content="utf-8" http-equiv="encoding">
-
-
-
 <script>
 
 //In this project, you will be finishing one method: createGroups().  To finish this method, you will need to be able to do the following:
@@ -19,7 +14,7 @@
 //Some quick examples of javascript code using an array and a map:
 //  var aStudent = students[0];
 //  var id = aStudent[0]; //the 5 digit id of the student
-//  var prefs = preferences[id]; //an array of ids that the studen with the gven id prefers
+//  var prefs = preferences[id]; //an array of ids that the studen with the given id prefers
 //
 //Displaying your results in the html can be a little tricky.  The createGroups() method already has
 //a variable named div.  To add some simple information to display on the webpage, you could write code like this:
@@ -27,6 +22,7 @@
 //  div.innerHTML += "What's up";
 //
 //You are more than welcome to investigate more advanced ways to format your ouput
+
 
 
 //A 2D array - each row is of length 2, where index 0 is the first name, and index 1 is the last name
@@ -41,7 +37,17 @@ var students = [];
 //map from student ids to an array of ids the student prefers
 var preferences = {};
 
-readTeachers();
+/*********************************/
+//local caching of teacher names
+/*********************************/
+window.onload = function() {
+    if(!localStorage.getItem('teacherNames')) {
+      readTeachers();
+    } else {
+      teacherNames = JSON.parse(localStorage.getItem('teacherNames'));
+      showTeachers();
+    }
+}
 
 
 //Example Test Cases
@@ -79,21 +85,21 @@ function readTeachers() {
                 //  things that are not classes), and a Teacher who has a
                 //  first name fo Niles and a last name of STAFF (similar
                 //  to the previous weird case);
-               //
+                //
                 //Also, this data is not sorted...
                 var result = request.responseText;
 
                 teacherNames = [];
                 var names = result.split("\n");
-                names.sort();
-
-                for(var i = 0; i < names.length; i++) {
-                  if(names[i] != "" && names[i] != ","){
+                for(var i = 0; i < names.length - 1; i++) { //last line has no data
                     teacherNames.push(names[i].split(","));
-                  }
                 }
-                teacherNames.push(names[0].split(","));
-                teacherNames.push(names[1].split(","));
+
+                /*********************************/
+                //save teacher names to the cache
+                /*********************************/
+                localStorage.setItem("teacherNames", JSON.stringify(teacherNames));
+
                 showTeachers();
 
             }
@@ -104,12 +110,6 @@ function readTeachers() {
     }
     request.send();
 
-}
-
-function sortNames(a, b){
-  if(a < b) return -1;
-  if(a > b) return 1;
-  return 0;
 }
 
 //displays all the teachers in a select element
@@ -139,6 +139,15 @@ function chooseTeacher() {
 //to the console.  Do NOT return in this function as it makes an
 //asynchronous call to a database.
 function readClasses(teacherFirstName, teacherLastName) {
+
+    /*********************************/
+    //local caching of class names
+    /*********************************/
+    if(localStorage.getItem('classes' + teacherFirstName + teacherLastName)) {
+      classes = JSON.parse(localStorage.getItem('classes' + teacherFirstName + teacherLastName));
+      showClasses();
+      return;
+    }
 
     var formData = new FormData();
     formData.append("teacherFirst", teacherFirstName);
@@ -173,6 +182,12 @@ function readClasses(teacherFirstName, teacherLastName) {
                 for(var i = 0; i < cs.length - 1; i++) { //last line has no data
                     classes.push(cs[i].split(","));
                 }
+
+                /*********************************/
+                //save classes to the cache
+                /*********************************/
+                localStorage.setItem("classes" + teacherFirstName + teacherLastName, JSON.stringify(classes));
+
                 showClasses();
             }
             else {
@@ -216,6 +231,32 @@ function chooseClass() {
 //to the console.  Do NOT return in this function as it makes an
 //asynchronous call to a database.
 function readStudents(teacherFirstName, teacherLastName, period) {
+
+    /*********************************/
+    //local caching of students
+    /*********************************/
+    if(localStorage.getItem('students' + teacherFirstName + teacherLastName + period)) {
+      students = JSON.parse(localStorage.getItem('students' + teacherFirstName + teacherLastName + period));
+
+      var groupSelect = document.getElementById("studentsToGroup");
+      groupSelect.innerHTML = "";
+
+      for(var i = 0; i < students.length; i++) {
+            var stud = students[i];
+
+            option = document.createElement("option");
+            option.value = stud[0];
+            option.selected = true;
+            option.text = stud[1] + " " + stud[2]
+            groupSelect.add(option);
+      }
+
+      document.getElementById("studentCount").innerHTML = students.length;
+
+      showPreferences();
+      return;
+    }
+
     var formData = new FormData();
     formData.append("teacherFirst", teacherFirstName);
     formData.append("teacherLast", teacherLastName);
@@ -238,11 +279,15 @@ function readStudents(teacherFirstName, teacherLastName, period) {
 
                 students = [];
                 var ss = result.split("\n");
-
                 for(var i = 0; i < ss.length - 1; i++) { //last line has no data
                     var stud = ss[i].split(",");
                     students.push(stud);
                 }
+
+                /*********************************/
+                //save students to the cache
+                /*********************************/
+                localStorage.setItem('students' + teacherFirstName + teacherLastName + period, JSON.stringify(students));
 
                 for(var i = 0; i < students.length; i++) {
                     var stud = students[i];
@@ -253,7 +298,6 @@ function readStudents(teacherFirstName, teacherLastName, period) {
                     option.text = stud[1] + " " + stud[2]
                     groupSelect.add(option);
                 }
-                //groupSelect.add(sortNames());
 
                 document.getElementById("studentCount").innerHTML = students.length;
 
@@ -286,7 +330,15 @@ function showPreferences() {
 //have recorded.  Do NOT return in this function as it makes an
 //asynchronous call to a database.
 function readPreferences(teacherFirstName, teacherLastName, period) {
-  var  counter = 0;
+
+    /*********************************/
+    //local caching of preferences
+    /*********************************/
+    if(localStorage.getItem('preferences' + teacherFirstName + teacherLastName + period)) {
+      var result = JSON.parse(localStorage.getItem('preferences' + teacherFirstName + teacherLastName + period));
+      displayPreferences(result);
+      return;
+    }
 
     var formData = new FormData();
     formData.append("teacherFirst", teacherFirstName);
@@ -308,51 +360,48 @@ function readPreferences(teacherFirstName, teacherLastName, period) {
                 //   no one has selected them).  It will be important to have the full list of students
                 //   read in as well to get the missing students, as well as to identify names
                 var result = request.responseText;
+                localStorage.setItem('preferences' + teacherFirstName + teacherLastName + period, JSON.stringify(result));
 
-                var div = document.getElementById("preferences");
-                div.innerHTML = "";
-                preferences = {};
-
-                var ss = result.split("\n");
-                for(var i = 0; i < ss.length - 1; i++) { //last line has no data
-
-                    var data = ss[i].split(",");
-                    var chooser = data[0];
-                    data.shift(); //remove first person
-
-                    preferences[chooser] = data; //make a map from the student id to a list of ids of students they prefer
-
-                    var p = document.createElement('p');
-
-                    p.innerHTML = nameOfStudentWithId(chooser) + '<span>: </span><br>' ;
-
-                    for(var j = 0; j < data.length; j++) {
-                      var sss = nameOfStudentWithId(data[j]);
-
-                      p.innerHTML += sss;
-
-
-
-                        if(j != data.length - 1)
-                            p.innerHTML += ", ";
-                    }
-                    div.appendChild(p);
-                }
+                displayPreferences(result);
             }
             else {
                 reportError("Error reading preferences");
             }
         }
     }
-    document.getElementById('preferences').style.cssText = 'margin-right:900px; font-family: CIRCULAR;';
-
     request.send(formData);
 }
 
+function displayPreferences(result) {
+    var div = document.getElementById("preferences");
+    div.innerHTML = "";
+    preferences = {};
 
-function getPersonByID(row) {
-  return students[row][1] + students[row][2] ;
+    var ss = result.split("\n");
+    for(var i = 0; i < ss.length - 1; i++) { //last line has no data
+
+        var data = ss[i].split(",");
+        var chooser = data[0];
+        data.shift(); //remove first person
+
+        preferences[chooser] = data; //make a map from the student id to a list of ids of students they prefer
+
+        var p = document.createElement('p');
+        p.innerHTML = nameOfStudentWithId(chooser) + ": ";
+
+        for(var j = 0; j < data.length; j++) {
+            p.innerHTML += nameOfStudentWithId(data[j]);
+
+            if(j != data.length - 1)
+                p.innerHTML += ", ";
+        }
+
+        div.appendChild(p);
+    }
 }
+
+
+
 /********************/
 /*     TO DO        */
 /********************/
@@ -372,31 +421,52 @@ function createGroups() {
     //toGroups values are selected by the user interface
     var toGroup = [];
     select = document.getElementById("studentsToGroup");
+    var count = 0;
     for(var i = 0; i < select.length; i++) {
         if(select.options[i].selected) {
             toGroup.push(students[i]);
+            count++;
         }
     }
 
     //array of how large each group should be - null if the user entered the data incorrectly
     //the sum of all the group sizes will match the length of the students array
-    var sizes = groupSizes();
+    var sizes = groupSizes(count);
 
     if(sizes == null)
         return;
 
     //Your job - group the students based on their preferences and the group sizes the teacher has selected
-    for(var i = 0; i < students.length; i++){
-      var studentID = students[i][0];
-      preferences[studentID][]
-
-
-    }
 
     //This is an array.  Each group that you form should be stored in an array which is then pushed into the groups array
     //i.e. this is really going to be a 2D array).
     //Each row should contain the ids numbers of students in the same group
     var groups = [];
+
+    //naive approach - just create groups in order
+    var pos = 0;
+    for(var i = 0; i < sizes.length; i++) {
+        var size = sizes[i];
+
+        var newGroup = [];
+        groups.push(newGroup);
+        for(var j = 0; j < size; j++) {
+            var stud = toGroup[pos];
+            pos++;
+
+            var id = stud[0];
+            newGroup.push(id);
+        }
+    }
+
+    //display the groups that were created
+    console.log(groups);
+	var groupsDiv = document.getElementById("groups");
+	for(var i = 0; i < groups.length; i++) {
+		var p = document.createElement("p");
+		p.innerHTML = groups[i];
+		groupsDiv.appendChild(p);
+	}
 
     //displays the average happiness of people in groups
     console.log(score(groups));
@@ -409,7 +479,7 @@ function score(groups) {
     var averageHappiness = 0;
     var numStudents = 0;
     for(var i = 0; i < groups.length; i++) {
-        var group = group[i];
+        var group = groups[i];
         numStudents += group.length;
 
         for(var j = 0; j < group.length; j++) {
@@ -418,13 +488,14 @@ function score(groups) {
             var prefs = preferences[id];
 
             var count = 0;
-            if(prefs != undefine){
-              for(var k = 0; k < group.length; k++) {
-                  if(j != k) {
-                      if(prefs.indexOf(group[k]) != -1)
-                          count++;
-                  }
-              }
+
+            if(prefs != undefined) {
+                for(var k = 0; k < group.length; k++) {
+                    if(j != k) {
+                        if(prefs.indexOf(group[k]) != -1)
+                            count++;
+                    }
+                }
             }
 
             //1 person group is auto happy
@@ -453,11 +524,11 @@ function nameOfStudentWithId(id) {
 }
 
 //reads the size of groups that the user has selected to create
-function groupSizes() {
+function groupSizes(target) {
     var input = document.getElementById("sizes").value;
 
     if(input == "") {
-        reportError("Make sure you entered the desired group sizes!");
+        reportError("Make sure you enterd the desired group sizes!");
         return null;
     }
 
@@ -473,7 +544,7 @@ function groupSizes() {
         count += sizes[i];
     }
 
-    if(count != students.length) {
+    if(count != target) {
         reportError("The sum of your group sizes is " + count + ", but there are " + students.length + " students in your class!");
         return null;
     }
@@ -485,6 +556,8 @@ function reportError(error) {
     alert(error);
 }
 </script>
+
+</head>
 <script>
 
   function sortNames(){
@@ -493,6 +566,13 @@ function reportError(error) {
       test.unshift(getPersonByID(i));
     }
     test.sort();
+  }
+</script>
+
+<script>
+  function after(){
+    document.getElementById('after').innerHTML = '';
+    document.getElementById('after').innerHTML += '<u><p style="font-family: Circular; font-size: 25px;">Groups:</p></u>';
   }
 </script>
 
@@ -518,7 +598,7 @@ function reportError(error) {
   <div class="second">
     <p style="font-family: Circular;">Desired Group Sizes (Separated by commas): <br/><input type="text" id="sizes" style="font-family: Circular; font-size: 15;"></input><p>
     <p style="font-family: Circular;">Students To Group:<br><select style="font-family: Circular; border: none" multiple id="studentsToGroup"></select><br></p>
-    <center><a href="#popup1"><button id="create" style="font-family: Circular;" onclick="createGroups())">Create Groups</button></a><br><br></center>
+    <center><a href="#popup1"><button id="create" style="font-family: Circular;" onclick="after();createGroups()">Create Groups</button></a><br><br></center>
 
     <br><br>
   </div>
