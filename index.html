@@ -444,23 +444,73 @@ function createGroups() {
     var groups = [];
 
     //naive approach - just create groups in order
-    var pos = 0;
-    for(var i = 0; i < sizes.length; i++) {
-        var size = sizes[i];
+    var groupsNums = 0;
 
-        var newGroup = [];
-        groups.push(newGroup);
-        for(var j = 0; j < size; j++) {
-            var stud = toGroup[pos];
-            pos++;
+  if (students.length % sizes != 0) {
+    //students left over
+    var extra = parseInt(students.length / sizes);
+    var amountInGroup = (students.length % sizes);
 
-            var id = stud[0];
-            newGroup.push(id);
+
+
+    for (var f = 0; f < sizes; f++) {
+      groups.push([]);
+
+      for (var g = 0; g < amountInGroup; g++) {
+        var randomPos = parseInt(Math.random() * students.length);
+        groups[f].push(students[randomPos][0]);
+        var index = students.indexOf(students[randomPos]);
+        if (index > -1) {
+          students.splice(index, 1);
         }
+      }
+    }
+		if(extra > 0){
+				var g = parseInt(Math.random() * groups.length);
+				groups[g].push(students[0][0]);
+				extra--;
+				var h = parseInt(Math.random() * groups.length);
+				if(g != h){
+					groups[h].push(students[1][0]);
+				}
+				else {
+					var h = parseInt(Math.random() * groups.length);
+					groups[h].push(students[1][0]);
+				}
+				extra--;
+			}
+  }
+
+
+  else {
+    groupsNums = students.length / sizes;
+
+    if (sizes === 1 && sizes < students.length) {
+      for (var i = 0; i < students.length; i++) {
+        console.log("Group: " + i);
+        console.log("Student " + students[i][0]);
+        console.log("ID # " + students[i][1]);
+      }
     }
 
+    else {
+      for (var f = 0; f < sizes; f++) {
+        groups.push([]);
+        for (var g = 0; g < groupsNums; g++) {
+          var randomPos = parseInt(Math.random() * students.length);
+          groups[f].push(students[randomPos][0]);
+          var index = students.indexOf(students[randomPos]);
+          if (index > -1) {
+            students.splice(index, 1);
+          }
+        }
+      }
+    }
+  }
+
+
     //display the groups that were created
-    console.log(groups);
+    console.log("groups" + groups);
 	var groupsDiv = document.getElementById("groups");
 	for(var i = 0; i < groups.length; i++) {
 		var p = document.createElement("p");
@@ -528,11 +578,11 @@ function groupSizes(target) {
     var input = document.getElementById("sizes").value;
 
     if(input == "") {
-        reportError("Make sure you enterd the desired group sizes!");
+        reportError("Make sure you enterd the desired group size!");
         return null;
     }
 
-    var split = input.split(",");
+    var split = input.split(" ");
 
     var sizes = [];
     for(var i = 0; i < split.length; i++) {
@@ -544,9 +594,13 @@ function groupSizes(target) {
         count += sizes[i];
     }
 
-    if(count != target) {
-        reportError("The sum of your group sizes is " + count + ", but there are " + students.length + " students in your class!");
+    if(count > target ) {
+        reportError("Your input value is too big (There are only " + target + " students in your class)! Your input was: " + count );
         return null;
+    }
+    else if(split > 1){
+      reportError(" input value is too big! Your input was:  " + count );
+      return null;
     }
 
     return sizes;
@@ -596,7 +650,7 @@ function reportError(error) {
     Total Student Count: <span  style="font-family: Circular;" id="studentCount"></span><br></p>
   </div>
   <div class="second">
-    <p style="font-family: Circular;">Desired Group Sizes (Separated by commas): <br/><input type="text" id="sizes" style="font-family: Circular; font-size: 15;"></input><p>
+    <p style="font-family: Circular;">Desired Group Size (Only One Value Please): <br/><input type="text" id="sizes" style="font-family: Circular; font-size: 15;"></input><p>
     <p style="font-family: Circular;">Students To Group:<br><select style="font-family: Circular; border: none" multiple id="studentsToGroup"></select><br></p>
     <center><a href="#popup1"><button id="create" style="font-family: Circular;" onclick="after();createGroups()">Create Groups</button></a><br><br></center>
 
@@ -632,9 +686,11 @@ function reportError(error) {
   </div>
 
 </div>
-
-
+<br/><br/><br/>
+<br/>
+<footer><p style="font-family: Circular; color: white;">Made With <span style="color: red">&hearts;</span> by Niles West AAD</p></footer>
 </body>
+
 
 <style>
   .preferences {
