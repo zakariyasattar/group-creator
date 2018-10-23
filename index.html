@@ -431,7 +431,9 @@ function createGroups() {
 
     //array of how large each group should be - null if the user entered the data incorrectly
     //the sum of all the group sizes will match the length of the students array
-    var sizes = groupSizes(count);
+    var input = document.getElementById("sizes").value;
+    console.log(input);
+    var sizes = input;
 
     if(sizes == null)
         return;
@@ -650,7 +652,7 @@ function reportError(error) {
     Total Student Count: <span  style="font-family: Circular;" id="studentCount"></span><br></p>
   </div>
   <div class="second">
-    <p style="font-family: Circular;">Desired Group Size (Only One Value Please): <br/><input type="text" id="sizes" style="font-family: Circular; font-size: 15;"></input><p>
+    <p style="font-family: Circular;">Number of groups (Only One Value Please): <br/><input type="text" id="sizes" style="font-family: Circular; font-size: 15;"></input><p>
     <p style="font-family: Circular;">Students To Group:<br><select style="font-family: Circular; border: none" multiple id="studentsToGroup"></select><br></p>
     <center><a href="#popup1"><button id="create" style="font-family: Circular;" onclick="after();createGroups()">Create Groups</button></a><br><br></center>
 
