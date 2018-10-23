@@ -512,11 +512,11 @@ function createGroups() {
 
 
     //display the groups that were created
-    console.log("groups" + groups);
-	var groupsDiv = document.getElementById("groups");
+	var groupsDiv = document.getElementById("after");
 	for(var i = 0; i < groups.length; i++) {
 		var p = document.createElement("p");
-		p.innerHTML = groups[i];
+		p.innerHTML = nameOfStudentWithId(groups[i]);
+    console.log(nameOfStudentWithId(68742));
 		groupsDiv.appendChild(p);
 	}
 
