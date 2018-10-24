@@ -92,10 +92,12 @@ function readTeachers() {
                 teacherNames = [];
                 var names = result.split("\n");
                 names.sort();
+                teacherNames.splice(0,1);
                 for(var i = 0; i < names.length - 1; i++) { //last line has no data
                     teacherNames.push(names[i].split(","));
                 }
                 teacherNames.sort();
+                console.log(teacherNames[0])
 
                 /*********************************/
                 //save teacher names to the cache
@@ -522,18 +524,6 @@ function createGroups() {
 		p.innerHTML = nameOfStudentWithId(groups[i]);
     console.log(nameOfStudentWithId(groups[i]));
 
-		p.innerHTML = groups[i];
-    console.log(nameOfStudentWithId(68572));
-
-		p.innerHTML = groups[i];
-    console.log(nameOfStudentWithId(68572));
-
-		p.innerHTML = groups[i];
-    console.log(nameOfStudentWithId(68572));
-
-
-		p.innerHTML = groups[i];
-    console.log(nameOfStudentWithId(68572));
 
 		groupsDiv.appendChild(p);
 	}
