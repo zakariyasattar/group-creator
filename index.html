@@ -517,6 +517,7 @@ function createGroups() {
 	var groupsDiv = document.getElementById("after");
 	for(var i = 0; i < groups.length; i++) {
 		var p = document.createElement("p");
+<<<<<<< HEAD
 
 		p.innerHTML = nameOfStudentWithId(groups[i]);
     console.log(nameOfStudentWithId(groups[i]));
@@ -530,6 +531,10 @@ function createGroups() {
 		p.innerHTML = groups[i];
     console.log(nameOfStudentWithId(68572));
 
+=======
+		p.innerHTML = groups[i];
+    console.log(nameOfStudentWithId(68572));
+>>>>>>> c06a5191439a4a8c08832258f8a604587b2ac39b
 		groupsDiv.appendChild(p);
 	}
 
@@ -580,6 +585,7 @@ function score(groups) {
 
 //returns the name of a student with the given id
 function nameOfStudentWithId(id) {
+<<<<<<< HEAD
 
     for(var i = 0; i < students.length; i++) {
         if(students[i][0] == id)
@@ -588,6 +594,8 @@ function nameOfStudentWithId(id) {
     }
 
 
+=======
+>>>>>>> c06a5191439a4a8c08832258f8a604587b2ac39b
   var name = "";
     for(var index = 0; index < students.length; index++){
       console.log("id" + id);
@@ -596,6 +604,7 @@ function nameOfStudentWithId(id) {
         name = students[index][1] + " " + students[index][2];
       }
     }
+<<<<<<< HEAD
 
   var name = "";
     for(var index = 0; index < students.length; index++){
@@ -615,6 +624,8 @@ function nameOfStudentWithId(id) {
       }
     }
 
+=======
+>>>>>>> c06a5191439a4a8c08832258f8a604587b2ac39b
     return name;
 }
 
@@ -694,6 +705,7 @@ function reportError(error) {
     Select Course: <select style="font-family: Circular;" id="classes" onchange="chooseClass()"></select><br></select><br>
     Total Student Count: <span  style="font-family: Circular;" id="studentCount"></span><br></p>
     <p style="font-family: Circular; color: white;">Made With <span style="color: red">&hearts;</span> by Niles West AAD</p>
+
   </div>
   <div class="second">
     <p style="font-family: Circular;">Number of groups (Only One Value Please): <br/><input type="text" id="sizes" style="font-family: Circular; font-size: 15;"></input><p>
