@@ -517,23 +517,8 @@ function createGroups() {
 	var groupsDiv = document.getElementById("after");
 	for(var i = 0; i < groups.length; i++) {
 		var p = document.createElement("p");
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-		p.innerHTML = nameOfStudentWithId(groups[i]);
-    console.log(nameOfStudentWithId(groups[i]));
-=======
 		p.innerHTML = groups[i];
     console.log(nameOfStudentWithId(68572));
->>>>>>> 07cc1fa9ffb1dcf6c8b8996adad2aa9bd45cde65
-=======
-		p.innerHTML = groups[i];
-    console.log(nameOfStudentWithId(68572));
->>>>>>> 07cc1fa9ffb1dcf6c8b8996adad2aa9bd45cde65
-=======
-		p.innerHTML = groups[i];
-    console.log(nameOfStudentWithId(68572));
->>>>>>> 07cc1fa9ffb1dcf6c8b8996adad2aa9bd45cde65
 		groupsDiv.appendChild(p);
 	}
 
@@ -584,16 +569,6 @@ function score(groups) {
 
 //returns the name of a student with the given id
 function nameOfStudentWithId(id) {
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-    for(var i = 0; i < students.length; i++) {
-        if(students[i][0] == id)
-            var name = students[i][1];
-            var lastName = students[i][2];
-    }
-
-=======
   var name = "";
     for(var index = 0; index < students.length; index++){
       console.log("id" + id);
@@ -602,27 +577,6 @@ function nameOfStudentWithId(id) {
         name = students[index][1] + " " + students[index][2];
       }
     }
->>>>>>> 07cc1fa9ffb1dcf6c8b8996adad2aa9bd45cde65
-=======
-  var name = "";
-    for(var index = 0; index < students.length; index++){
-      console.log("id" + id);
-      console.log("tse" + students[index][0]);
-      if(id === students[index][0]){
-        name = students[index][1] + " " + students[index][2];
-      }
-    }
->>>>>>> 07cc1fa9ffb1dcf6c8b8996adad2aa9bd45cde65
-=======
-  var name = "";
-    for(var index = 0; index < students.length; index++){
-      console.log("id" + id);
-      console.log("tse" + students[index][0]);
-      if(id === students[index][0]){
-        name = students[index][1] + " " + students[index][2];
-      }
-    }
->>>>>>> 07cc1fa9ffb1dcf6c8b8996adad2aa9bd45cde65
     return name;
 }
 
@@ -702,6 +656,7 @@ function reportError(error) {
     Select Course: <select style="font-family: Circular;" id="classes" onchange="chooseClass()"></select><br></select><br>
     Total Student Count: <span  style="font-family: Circular;" id="studentCount"></span><br></p>
     <p style="font-family: Circular; color: white;">Made With <span style="color: red">&hearts;</span> by Niles West AAD</p>
+
   </div>
   <div class="second">
     <p style="font-family: Circular;">Number of groups (Only One Value Please): <br/><input type="text" id="sizes" style="font-family: Circular; font-size: 15;"></input><p>
