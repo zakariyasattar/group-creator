@@ -91,9 +91,11 @@ function readTeachers() {
 
                 teacherNames = [];
                 var names = result.split("\n");
+                names.sort();
                 for(var i = 0; i < names.length - 1; i++) { //last line has no data
                     teacherNames.push(names[i].split(","));
                 }
+                teacherNames.sort();
 
                 /*********************************/
                 //save teacher names to the cache
@@ -653,6 +655,7 @@ function reportError(error) {
     <p style="font-family: Circular;">Select Teacher: <select  style="font-family: Circular;" id="teachers" onchange="chooseTeacher()"></select><br></select><br>
     Select Course: <select style="font-family: Circular;" id="classes" onchange="chooseClass()"></select><br></select><br>
     Total Student Count: <span  style="font-family: Circular;" id="studentCount"></span><br></p>
+    <p style="font-family: Circular; color: white;">Made With <span style="color: red">&hearts;</span> by Niles West AAD</p>
   </div>
   <div class="second">
     <p style="font-family: Circular;">Number of groups (Only One Value Please): <br/><input type="text" id="sizes" style="font-family: Circular; font-size: 15;"></input><p>
@@ -660,6 +663,7 @@ function reportError(error) {
     <center><a href="#popup1"><button id="create" style="font-family: Circular;" onclick="after();createGroups()">Create Groups</button></a><br><br></center>
 
     <br><br>
+    <footer></footer>
   </div>
 
 </div>
@@ -693,7 +697,6 @@ function reportError(error) {
 </div>
 <br/><br/><br/>
 <br/>
-<footer><p style="font-family: Circular; color: white;">Made With <span style="color: red">&hearts;</span> by Niles West AAD</p></footer>
 </body>
 
 
