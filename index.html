@@ -517,8 +517,13 @@ function createGroups() {
 		var p = document.createElement("p");
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 		p.innerHTML = nameOfStudentWithId(groups[i]);
     console.log(nameOfStudentWithId(groups[i]));
+=======
+		p.innerHTML = groups[i];
+    console.log(nameOfStudentWithId(68572));
+>>>>>>> 07cc1fa9ffb1dcf6c8b8996adad2aa9bd45cde65
 =======
 		p.innerHTML = groups[i];
     console.log(nameOfStudentWithId(68572));
@@ -579,12 +584,23 @@ function score(groups) {
 function nameOfStudentWithId(id) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     for(var i = 0; i < students.length; i++) {
         if(students[i][0] == id)
             var name = students[i][1];
             var lastName = students[i][2];
     }
 
+=======
+  var name = "";
+    for(var index = 0; index < students.length; index++){
+      console.log("id" + id);
+      console.log("tse" + students[index][0]);
+      if(id === students[index][0]){
+        name = students[index][1] + " " + students[index][2];
+      }
+    }
+>>>>>>> 07cc1fa9ffb1dcf6c8b8996adad2aa9bd45cde65
 =======
   var name = "";
     for(var index = 0; index < students.length; index++){
