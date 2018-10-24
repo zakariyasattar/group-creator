@@ -1,6 +1,7 @@
 <html>
 <head>
 <title>Niles West Group Creator</title>
+<span><img id="logo" src="nwlogo.png" ></img> </span>
 
 <script>
 
@@ -92,12 +93,15 @@ function readTeachers() {
                 teacherNames = [];
                 var names = result.split("\n");
                 names.sort();
-                teacherNames.splice(0,1);
+
                 for(var i = 0; i < names.length - 1; i++) { //last line has no data
+                  if(i == 0 || i == 1){
+                    names.shift();
+                  }
+                  else{
                     teacherNames.push(names[i].split(","));
+                  }
                 }
-                teacherNames.sort();
-                console.log(teacherNames[0])
 
                 /*********************************/
                 //save teacher names to the cache
@@ -820,6 +824,14 @@ function reportError(error) {
     float: left;
     float: top;
   }
+
+  #logo {
+	position: relative;
+  bottom: 30%;
+	float: left;
+	width: 60px;
+	height: 40px;
+}
   #after {
     overflow: hidden;
     color: white;
