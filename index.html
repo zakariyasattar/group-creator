@@ -125,7 +125,9 @@ function showTeachers() {
     for(var i = 0; i < teacherNames.length; i++) {
         var option = document.createElement("option");
         option.text = teacherNames[i][0] + " " + teacherNames[i][1];
-
+        if(teacherNames[i][0] == ""){
+          teacherNames.splice(0,0);
+        }
 
 
         select.appendChild(option);
