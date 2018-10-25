@@ -92,7 +92,6 @@ function readTeachers() {
 
                 teacherNames = [];
                 var names = result.split("\n");
-                names.sort();
 
                 for(var i = 0; i < names.length - 1; i++) { //last line has no data
                   if(i == 0 || i == 1){
@@ -102,6 +101,7 @@ function readTeachers() {
                     teacherNames.push(names[i].split(","));
                   }
                 }
+                teacherNames.sort();
 
                 /*********************************/
                 //save teacher names to the cache
@@ -526,7 +526,6 @@ function createGroups() {
 
 
 		p.innerHTML = nameOfStudentWithId(groups[i]);
-    console.log(nameOfStudentWithId(groups[i]));
 
 
 		groupsDiv.appendChild(p);
@@ -577,49 +576,14 @@ function score(groups) {
     return averageHappiness;
 }
 
-//returns the name of a student with the given id
+
 function nameOfStudentWithId(id) {
-
-
     for(var i = 0; i < students.length; i++) {
         if(students[i][0] == id)
-            var name = students[i][1];
-            var lastName = students[i][2];
+            var x = students[i][1] + " " + students[i][2];
+        }
+        return x;
     }
-
-
-
-  var name = "";
-    for(var index = 0; index < students.length; index++){
-      console.log("id" + id);
-      console.log("tse" + students[index][0]);
-      if(id === students[index][0]){
-        name = students[index][1] + " " + students[index][2];
-      }
-    }
-
-
-  var name = "";
-    for(var index = 0; index < students.length; index++){
-      console.log("id" + id);
-      console.log("tse" + students[index][0]);
-      if(id === students[index][0]){
-        name = students[index][1] + " " + students[index][2];
-      }
-    }
-
-  var name = "";
-    for(var index = 0; index < students.length; index++){
-      console.log("id" + id);
-      console.log("tse" + students[index][0]);
-      if(id === students[index][0]){
-        name = students[index][1] + " " + students[index][2];
-      }
-    }
-
-
-    return name;
-}
 
 //reads the size of groups that the user has selected to create
 function groupSizes(target) {
