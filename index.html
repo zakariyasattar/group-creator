@@ -91,11 +91,13 @@ function readTeachers() {
 
                 teacherNames = [];
                 var names = result.split("\n");
-                names.sort();
+
+
                 for(var i = 0; i < names.length - 1; i++) { //last line has no data
                     teacherNames.push(names[i].split(","));
                 }
                 teacherNames.sort();
+
 
                 /*********************************/
                 //save teacher names to the cache
@@ -122,6 +124,11 @@ function showTeachers() {
     for(var i = 0; i < teacherNames.length; i++) {
         var option = document.createElement("option");
         option.text = teacherNames[i][0] + " " + teacherNames[i][1];
+        if(teacherNames[i] == " "){
+          teacherNames.shif(i,1);
+        }
+
+
         select.appendChild(option);
     }
 
