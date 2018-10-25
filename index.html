@@ -1,6 +1,7 @@
 <html>
 <head>
 <title>Niles West Group Creator</title>
+<span><img id="logo" src="nwlogo.png" ></img> </span>
 
 <script>
 
@@ -92,9 +93,17 @@ function readTeachers() {
                 teacherNames = [];
                 var names = result.split("\n");
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 2306ddfcee89aac178988ec4dfc253acac080dbf
                 for(var i = 0; i < names.length - 1; i++) { //last line has no data
+                  if(i == 0 || i == 1){
+                    names.shift();
+                  }
+                  else{
                     teacherNames.push(names[i].split(","));
+                  }
                 }
                 teacherNames.sort();
 
@@ -527,20 +536,7 @@ function createGroups() {
 
 
 		p.innerHTML = nameOfStudentWithId(groups[i]);
-    console.log(nameOfStudentWithId(groups[i]));
 
-		p.innerHTML = groups[i];
-    console.log(nameOfStudentWithId(68572));
-
-		p.innerHTML = groups[i];
-    console.log(nameOfStudentWithId(68572));
-
-		p.innerHTML = groups[i];
-    console.log(nameOfStudentWithId(68572));
-
-
-		p.innerHTML = groups[i];
-    console.log(nameOfStudentWithId(68572));
 
 		groupsDiv.appendChild(p);
 	}
@@ -590,49 +586,14 @@ function score(groups) {
     return averageHappiness;
 }
 
-//returns the name of a student with the given id
+
 function nameOfStudentWithId(id) {
-
-
     for(var i = 0; i < students.length; i++) {
         if(students[i][0] == id)
-            var name = students[i][1];
-            var lastName = students[i][2];
+            var x = students[i][1] + " " + students[i][2];
+        }
+        return x;
     }
-
-
-
-  var name = "";
-    for(var index = 0; index < students.length; index++){
-      console.log("id" + id);
-      console.log("tse" + students[index][0]);
-      if(id === students[index][0]){
-        name = students[index][1] + " " + students[index][2];
-      }
-    }
-
-
-  var name = "";
-    for(var index = 0; index < students.length; index++){
-      console.log("id" + id);
-      console.log("tse" + students[index][0]);
-      if(id === students[index][0]){
-        name = students[index][1] + " " + students[index][2];
-      }
-    }
-
-  var name = "";
-    for(var index = 0; index < students.length; index++){
-      console.log("id" + id);
-      console.log("tse" + students[index][0]);
-      if(id === students[index][0]){
-        name = students[index][1] + " " + students[index][2];
-      }
-    }
-
-
-    return name;
-}
 
 //reads the size of groups that the user has selected to create
 function groupSizes(target) {
@@ -837,6 +798,14 @@ function reportError(error) {
     float: left;
     float: top;
   }
+
+  #logo {
+	position: relative;
+  bottom: 30%;
+	float: left;
+	width: 60px;
+	height: 40px;
+}
   #after {
     overflow: hidden;
     color: white;
