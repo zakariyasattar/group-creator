@@ -523,6 +523,7 @@ function createGroups() {
 
     //display the groups that were created
 	var groupsDiv = document.getElementById("after");
+
 	for(var i = 0; i < groups.length; i++) {
 		var p = document.createElement("p");
 		p.innerHTML = nameOfStudentWithId(groups[i]);
@@ -578,10 +579,14 @@ function score(groups) {
 function nameOfStudentWithId(id) {
     for(var i = 0; i < students.length; i++) {
         if(students[i][0] == id)
-            var x = students[i][1] + " " + students[i][2];
+
+            if(students[i][1] + " " + students[i][2] != undefined){
+              var x = students[i][1] + " " + students[i][2];
+            }
         }
+        console.log(x);
         return x;
-    }
+}
 
 //reads the size of groups that the user has selected to create
 function groupSizes(target) {
@@ -622,16 +627,6 @@ function reportError(error) {
 </script>
 
 </head>
-<script>
-
-  function sortNames(){
-    var test = [];
-    for(var i = 0; i < students.length; i++){
-      test.unshift(getPersonByID(i));
-    }
-    test.sort();
-  }
-</script>
 
 <script>
   function after(){
