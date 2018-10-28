@@ -424,12 +424,14 @@ function displayPreferences(result) {
 //                         - each value is an array of ids that the student prefers
 //                           Note: not every student will necessarially have picked people!
 function createGroups() {
+  var targetDiv = document.getElementById("popup1").getElementsByClassName("popupContent")[0];
+  targetDiv.textContent = '';
   var input = 0;
 
     //where to display your results
     var div = document.getElementById("groups");
 
-    //this block of code determines which students should be grouped
+    //this block of code determines which temp should be grouped
     //toGroup will be a subset of the full stundets array
     //toGroups values are selected by the user interface
     var toGroup = [];
@@ -443,58 +445,59 @@ function createGroups() {
     }
 
     //array of how large each group should be - null if the user entered the data incorrectly
-    //the sum of all the group sizes will match the length of the students array
+    //the sum of all the group sizes will match the length of the temp array
     input = document.getElementById("sizes").value;
-    var length = students.length;
 
-    if(input <= length){
+    var temp = students.slice(0);
+
+    if(input <= temp.length){
       canDisplay = true;
       var sizes = input;
     }
-    else if(input > length){
-      swal("Sorry!", "You have requested more groups than number of students!", "error")
+    else if(input > temp.length){
+      swal("Sorry!", "You have requested more groups than number of temp", "error")
     }
     if(sizes == null)
         return;
 
-    //Your job - group the students based on their preferences and the group sizes the teacher has selected
+    //Your job - group the temp based on their preferences and the group sizes the teacher has selected
 
     //This is an array.  Each group that you form should be stored in an array which is then pushed into the groups array
     //i.e. this is really going to be a 2D array).
-    //Each row should contain the ids numbers of students in the same group
+    //Each row should contain the ids numbers of temp in the same group
     var groups = [];
 
     //naive approach - just create groups in order
     var groupsNums = 0;
 
-  if (students.length % sizes != 0) {
-    //students left over
-    var extra = parseInt(students.length / sizes);
-    var amountInGroup = (students.length % sizes);
+  if (temp.length % sizes != 0) {
+    //temp left over
+    var extra = parseInt(temp.length / sizes);
+    var amountInGroup = (temp.length % sizes);
 
     for (var f = 0; f < sizes; f++) {
       groups.push([]);
 
       for (var g = 0; g < amountInGroup; g++) {
-        var randomPos = parseInt(Math.random() * students.length);
-        groups[f].push(students[randomPos][0]);
-        var index = students.indexOf(students[randomPos]);
+        var randomPos = parseInt(Math.random() * temp.length);
+        groups[f].push(temp[randomPos][0]);
+        var index = temp.indexOf(temp[randomPos]);
         if (index > -1) {
-          students.splice(index, 1);
+          temp.splice(index, 1);
         }
       }
     }
 		if(extra > 0){
 				var g = parseInt(Math.random() * groups.length);
-				groups[g].push(students[0][0]);
+				groups[g].push(temp[0][0]);
 				extra--;
 				var h = parseInt(Math.random() * groups.length);
 				if(g != h){
-					groups[h].push(students[1][0]);
+					groups[h].push(temp[1][0]);
 				}
 				else {
 					var h = parseInt(Math.random() * groups.length);
-					groups[h].push(students[1][0]);
+					groups[h].push(temp[1][0]);
 				}
 				extra--;
 			}
@@ -502,13 +505,13 @@ function createGroups() {
 
 
   else {
-    groupsNums = students.length / sizes;
+    groupsNums = temp.length / sizes;
 
-    if (sizes === 1 && sizes < students.length) {
-      for (var i = 0; i < students.length; i++) {
+    if (sizes === 1 && sizes < temp.length) {
+      for (var i = 0; i < temp.length; i++) {
         console.log("Group: " + i);
-        console.log("Student " + students[i][0]);
-        console.log("ID # " + students[i][1]);
+        console.log("Student " + temp[i][0]);
+        console.log("ID # " + temp[i][1]);
       }
     }
 
@@ -516,11 +519,11 @@ function createGroups() {
       for (var f = 0; f < sizes; f++) {
         groups.push([]);
         for (var g = 0; g < groupsNums; g++) {
-          var randomPos = parseInt(Math.random() * students.length);
-          groups[f].push(students[randomPos][0]);
-          var index = students.indexOf(students[randomPos]);
+          var randomPos = parseInt(Math.random() * temp.length);
+          groups[f].push(temp[randomPos][0]);
+          var index = temp.indexOf(temp[randomPos]);
           if (index > -1) {
-            students.splice(index, 1);
+            temp.splice(index, 1);
           }
         }
       }
@@ -530,7 +533,7 @@ function createGroups() {
 
     //display the groups that were created
 	var groupsDiv = document.getElementById("after");
-  var targetDiv = document.getElementById("popup1").getElementsByClassName("popupContent")[0];
+
   console.log(targetDiv)
 
 	for(var i = 0; i < groups.length; i++) {
@@ -540,9 +543,10 @@ function createGroups() {
     targetDiv.textContent += groups[i];
 	}
 
+
     //displays the average happiness of people in groups
     console.log("score " + score(groups));
-    console.log("students" + students);
+    console.log("temp" + temp);
 }
 
 //groups is an array of arrays (2D array) where each row is a group, and every element in a row is an id number
