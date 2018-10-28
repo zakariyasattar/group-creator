@@ -3,6 +3,7 @@
 <title>Niles West Group Creator</title>
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <span><img id="logo" src="nwlogo.png" ></img> </span>
+<link rel="shortcut icon" href="favicon.ico">
 
 <style>
   *{font-family: Circular;}
@@ -414,7 +415,7 @@ function displayPreferences(result) {
 }
 
 function isValid(str){
- return !/[~`!#$%\^&*+=\-\[\]\\';,/{}|\\":<>\?]/g.test(str) && str.length != 0 && str.indexOf(' ') >= 0;;
+ return !/[~`!#$%\^&*+=\-\[\]\\';,/{}|\\":<>\?]/g.test(str) && str.length != 0 && str.indexOf(' ') >= 0;
 }
 
 
@@ -453,9 +454,7 @@ function createGroups() {
     input = document.getElementById("sizes").value;
 
     if(!isValid(input)){
-      swal("Sorry!", "Your input is invalid", "error")
 
-    }
     var temp = students.slice(0);
 
     if(input <= temp.length){
@@ -554,6 +553,10 @@ function createGroups() {
     //displays the average happiness of people in groups
     console.log("score " + score(groups));
     console.log("temp" + temp);
+  }
+  else {
+    swal("Sorry!", "Your input is invalid", "error")
+  }
 }
 
 
@@ -604,7 +607,6 @@ function nameOfStudentWithId(id) {
         if(students[i][0] == id)
             return students[i][1] + " " + students[i][2];
     }
-
     return id;
 }
 
@@ -856,7 +858,7 @@ function reportError(error) {
 .popup {
   margin: 70px auto;
   padding: 20px;
-  background: #fff;
+  background: white;
   border-radius: 5px;
   text-align: center;
   vertical-align: middle;
@@ -868,12 +870,12 @@ function reportError(error) {
 
 .popup h2 {
   margin-top: 0;
-  color: #333;
+  color: black;
   font-family: Circular;
 }
 .popup p {
   margin-top: 0;
-  color: #333;
+  color: black;
   font-family: Circular;
 }
 .popup .close {
