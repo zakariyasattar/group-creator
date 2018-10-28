@@ -29,7 +29,7 @@
 //
 //You are more than welcome to investigate more advanced ways to format your ouput
 
-var canDisplay = false;
+var canDisplay = true;
 
 //A 2D array - each row is of length 2, where index 0 is the first name, and index 1 is the last name
 var teacherNames = [];
@@ -407,11 +407,15 @@ function displayPreferences(result) {
             if(j != data.length - 1)
                 p.innerHTML += ", ";
         }
+        document.getElementById('preferences').style.cssText = 'margin-right:900px';
 
         div.appendChild(p);
     }
 }
 
+function isValid(str){
+ return !/[~`!#$%\^&*+=\-\[\]\\';,/{}|\\":<>\?]/g.test(str) && str.length != 0 && str.indexOf(' ') >= 0;;
+}
 
 
 /********************/
@@ -448,14 +452,17 @@ function createGroups() {
     //the sum of all the group sizes will match the length of the temp array
     input = document.getElementById("sizes").value;
 
+    if(!isValid(input)){
+      swal("Sorry!", "Your input is invalid", "error")
+
+    }
     var temp = students.slice(0);
 
     if(input <= temp.length){
-      canDisplay = true;
       var sizes = input;
     }
     else if(input > temp.length){
-      swal("Sorry!", "You have requested more groups than number of temp", "error")
+      swal("Sorry!", "You have requested more groups than students in the class", "error");
     }
     if(sizes == null)
         return;
@@ -548,6 +555,7 @@ function createGroups() {
     console.log("score " + score(groups));
     console.log("temp" + temp);
 }
+
 
 //groups is an array of arrays (2D array) where each row is a group, and every element in a row is an id number
 //precondition - all grops are of the correct size requested by the user of the program
@@ -666,7 +674,6 @@ function reportError(error) {
     <p style="font-family: Circular;">Number of groups (Only One Value Please): <br/><input type="text" id="sizes" style="font-family: Circular; font-size: 15;"></input><p>
     <p style="font-family: Circular;">Students To Group:<br><select style="font-family: Circular; border: none" multiple id="studentsToGroup"></select><br></p>
     <center><a href="#popup1"><button id="create" style="font-family: Circular;" onclick="after();createGroups()">Create Groups</button></a><br><br></center>
-
     <br><br>
     <footer></footer>
   </div>
@@ -877,7 +884,6 @@ function reportError(error) {
   font-size: 30px;
   font-weight: bold;
   text-decoration: none;
-  color: #333;
 }
 .popup .close:hover {
   color: #06D85F;
