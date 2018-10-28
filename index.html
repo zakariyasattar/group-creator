@@ -1,7 +1,12 @@
 <html>
 <head>
 <title>Niles West Group Creator</title>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <span><img id="logo" src="nwlogo.png" ></img> </span>
+
+<style>
+  *{font-family: Circular;}
+</style>
 
 <script>
 
@@ -24,7 +29,7 @@
 //
 //You are more than welcome to investigate more advanced ways to format your ouput
 
-
+var canDisplay = false;
 
 //A 2D array - each row is of length 2, where index 0 is the first name, and index 1 is the last name
 var teacherNames = [];
@@ -94,11 +99,13 @@ function readTeachers() {
                 var names = result.split("\n");
 
                 for(var i = 0; i < names.length - 1; i++) { //last line has no data
-                    teacherNames.push(names[i].split(","));
-
+                  teacherNames.push(names[i].split(","));
                 }
                 teacherNames.sort();
 
+                var place = teacherNames[0];
+                teacherNames.splice(0, 1);
+                teacherNames.push(place);
 
                 /*********************************/
                 //save teacher names to the cache
@@ -125,11 +132,6 @@ function showTeachers() {
     for(var i = 0; i < teacherNames.length; i++) {
         var option = document.createElement("option");
         option.text = teacherNames[i][0] + " " + teacherNames[i][1];
-        if(teacherNames[i][0] == ""){
-          teacherNames.splice(0,0);
-        }
-
-
         select.appendChild(option);
     }
 
@@ -422,6 +424,7 @@ function displayPreferences(result) {
 //                         - each value is an array of ids that the student prefers
 //                           Note: not every student will necessarially have picked people!
 function createGroups() {
+  var input = 0;
 
     //where to display your results
     var div = document.getElementById("groups");
@@ -441,10 +444,16 @@ function createGroups() {
 
     //array of how large each group should be - null if the user entered the data incorrectly
     //the sum of all the group sizes will match the length of the students array
-    var input = document.getElementById("sizes").value;
-    console.log(input);
-    var sizes = input;
+    input = document.getElementById("sizes").value;
+    var length = students.length;
 
+    if(input <= length){
+      canDisplay = true;
+      var sizes = input;
+    }
+    else if(input > length){
+      swal("Sorry!", "You have requested more groups than number of students!", "error")
+    }
     if(sizes == null)
         return;
 
@@ -462,8 +471,6 @@ function createGroups() {
     //students left over
     var extra = parseInt(students.length / sizes);
     var amountInGroup = (students.length % sizes);
-
-
 
     for (var f = 0; f < sizes; f++) {
       groups.push([]);
@@ -523,15 +530,19 @@ function createGroups() {
 
     //display the groups that were created
 	var groupsDiv = document.getElementById("after");
+  var targetDiv = document.getElementById("popup1").getElementsByClassName("popupContent")[0];
+  console.log(targetDiv)
 
 	for(var i = 0; i < groups.length; i++) {
 		var p = document.createElement("p");
-		p.innerHTML = nameOfStudentWithId(groups[i]);
+		p.innerHTML = groups[i];
 		groupsDiv.appendChild(p);
+    targetDiv.textContent += groups[i];
 	}
 
     //displays the average happiness of people in groups
-    console.log(score(groups));
+    console.log("score " + score(groups));
+    console.log("students" + students);
 }
 
 //groups is an array of arrays (2D array) where each row is a group, and every element in a row is an id number
@@ -578,14 +589,12 @@ function score(groups) {
 
 function nameOfStudentWithId(id) {
     for(var i = 0; i < students.length; i++) {
-        if(students[i][0] == id)
-
-            if(students[i][1] + " " + students[i][2] != undefined){
-              var x = students[i][1] + " " + students[i][2];
-            }
+        if(students[i][0] == id){
+          var x = students[i][1] + " " + students[i][2];
         }
-        console.log(x);
+        console.log("x" + x);
         return x;
+      }
 }
 
 //reads the size of groups that the user has selected to create
@@ -630,22 +639,16 @@ function reportError(error) {
 
 <script>
   function after(){
-    document.getElementById('after').innerHTML = '';
-    document.getElementById('after').innerHTML += '<u><p style="font-family: Circular; font-size: 25px;">Groups:</p></u>';
+    if(canDisplay){
+      document.getElementById('after').innerHTML = '';
+      document.getElementById('after').innerHTML += '<u><p style="font-family: Circular; font-size: 25px;">Groups:</p></u>';
+    }
   }
 </script>
 
 </head>
 
 <body>
-
-  <style>
-        @font-face { font-family: Circular; src: url('CIRCULAR.TTF'); }
-        h1 {
-           font-family: Circular
-        }
-  </style>
-
 
 <center><h1 style="font-family: Circular; color: white;">Niles West Group Creator</h1></center>
 <div class="content">
@@ -673,7 +676,7 @@ function reportError(error) {
   <div class="popup">
     <u><h2>Groups:</h2></u>
     <a class="close" href="#">&times;</a>
-    <div class="content">
+    <div class="popupContent">
 
     </div>
   </div>
