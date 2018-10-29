@@ -455,104 +455,103 @@ function createGroups() {
 
     if(!isValid(input)){
 
-    var temp = students.slice(0);
+      var temp = students.slice(0);
 
-    if(input <= temp.length){
-      var sizes = input;
-    }
-    else if(input > temp.length){
-      swal("Sorry!", "You have requested more groups than students in the class", "error");
-    }
-    if(sizes == null)
-        return;
+      if(input <= temp.length){
+        var sizes = input;
+      }
+      else if(input > temp.length){
+        swal("Sorry!", "You have requested more groups than students in the class", "error");
+      }
+      if(sizes == null)
+          return;
 
-    //Your job - group the temp based on their preferences and the group sizes the teacher has selected
+      //Your job - group the temp based on their preferences and the group sizes the teacher has selected
 
-    //This is an array.  Each group that you form should be stored in an array which is then pushed into the groups array
-    //i.e. this is really going to be a 2D array).
-    //Each row should contain the ids numbers of temp in the same group
-    var groups = [];
+      //This is an array.  Each group that you form should be stored in an array which is then pushed into the groups array
+      //i.e. this is really going to be a 2D array).
+      //Each row should contain the ids numbers of temp in the same group
+      var groups = [];
 
-    //naive approach - just create groups in order
-    var groupsNums = 0;
+      //naive approach - just create groups in order
+      var groupsNums = 0;
 
-  if (temp.length % sizes != 0) {
-    //temp left over
-    var extra = parseInt(temp.length / sizes);
-    var amountInGroup = (temp.length % sizes);
+      if (temp.length % sizes != 0) {
+        //students left over
+        var extra = parseInt(temp.length / sizes);
+        var amountInGroup = (temp.length % sizes);
 
-    for (var f = 0; f < sizes; f++) {
-      groups.push([]);
-
-      for (var g = 0; g < amountInGroup; g++) {
-        var randomPos = parseInt(Math.random() * temp.length);
-        groups[f].push(temp[randomPos][0]);
-        var index = temp.indexOf(temp[randomPos]);
-        if (index > -1) {
-          temp.splice(index, 1);
+        for (var f = 0; f < sizes; f++) {
+          groups.push([]);
+          console.log(amountInGroup)
+          for (var g = 0; g < amountInGroup; g++) {
+            var randomPos = parseInt((Math.random() * temp.length) + 0);
+            console.log(randomPos);
+            groups[f].push(temp[randomPos][0]);
+            var index = temp.indexOf(temp[randomPos]);
+            if (index > -1) {
+              temp.splice(index, 1);
+            }
+          }
         }
+      	if(extra > 0){
+      			var g = parseInt(Math.random() * groups.length);
+      			groups[g].push(temp[0][0]);
+      			extra--;
+      			var h = parseInt(Math.random() * groups.length);
+      			if(g != h){
+      				groups[h].push(temp[1][0]);
+      			}
+      			else {
+      				var h = parseInt(Math.random() * groups.length);
+      				groups[h].push(temp[1][0]);
+      			}
+      			extra--;
+      		}
       }
-    }
-		if(extra > 0){
-				var g = parseInt(Math.random() * groups.length);
-				groups[g].push(temp[0][0]);
-				extra--;
-				var h = parseInt(Math.random() * groups.length);
-				if(g != h){
-					groups[h].push(temp[1][0]);
-				}
-				else {
-					var h = parseInt(Math.random() * groups.length);
-					groups[h].push(temp[1][0]);
-				}
-				extra--;
-			}
-  }
 
 
-  else {
-    groupsNums = temp.length / sizes;
+      else {
+        groupsNums = temp.length / sizes;
 
-    if (sizes === 1 && sizes < temp.length) {
-      for (var i = 0; i < temp.length; i++) {
-        console.log("Group: " + i);
-        console.log("Student " + temp[i][0]);
-        console.log("ID # " + temp[i][1]);
-      }
-    }
+        if (sizes == 1 && sizes < temp.length) {
+          for (var i = 0; i < temp.length; i++) {
+            console.log("Group: " + i);
+            console.log("Student " + temp[i][0]);
+            console.log("ID # " + temp[i][1]);
+          }
+        }
 
-    else {
-      for (var f = 0; f < sizes; f++) {
-        groups.push([]);
-        for (var g = 0; g < groupsNums; g++) {
-          var randomPos = parseInt(Math.random() * temp.length);
-          groups[f].push(temp[randomPos][0]);
-          var index = temp.indexOf(temp[randomPos]);
-          if (index > -1) {
-            temp.splice(index, 1);
+        else {
+          for (var f = 0; f < sizes; f++) {
+            groups.push([]);
+            for (var g = 0; g < groupsNums; g++) {
+              var randomPos = parseInt(Math.random() * temp.length);
+              groups[f].push(temp[randomPos][0]);
+              var index = temp.indexOf(temp[randomPos]);
+              if (index > -1) {
+                temp.splice(index, 1);
+              }
+            }
           }
         }
       }
-    }
-  }
 
+        //display the groups that were created
+      var groupsDiv = document.getElementById("after");
 
-    //display the groups that were created
-	var groupsDiv = document.getElementById("after");
+      console.log(targetDiv)
 
-  console.log(targetDiv)
+      for(var i = 0; i < groups.length; i++) {
+      	var p = document.createElement("p");
+      	p.innerHTML = "Group " + (i+1) + ": " + nameOfStudentWithId(groups[i]);
+      	groupsDiv.appendChild(p);
+        targetDiv.textContent += nameOfStudentWithId(groups[i]);
+      }
 
-	for(var i = 0; i < groups.length; i++) {
-		var p = document.createElement("p");
-		p.innerHTML = nameOfStudentWithId(groups[i]);
-		groupsDiv.appendChild(p);
-    targetDiv.textContent += nameOfStudentWithId(groups[i]);
-	}
-
-
-    //displays the average happiness of people in groups
-    console.log("score " + score(groups));
-    console.log("temp" + temp);
+      //displays the average happiness of people in groups
+      console.log("score " + score(groups));
+      console.log("temp" + temp);
   }
   else {
     swal("Sorry!", "Your input is invalid", "error")
@@ -605,7 +604,7 @@ function score(groups) {
 function nameOfStudentWithId(id) {
     for(var i = 0; i < students.length; i++) {
         if(students[i][0] == id)
-            return students[i][1] + " " + students[i][2];
+            return students[i][1] + " " + students[i][2].charAt(0) + ".";
     }
     return id;
 }
