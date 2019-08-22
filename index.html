@@ -152,15 +152,16 @@ function chooseTeacher() {
 //to the console.  Do NOT return in this function as it makes an
 //asynchronous call to a database.
 function readClasses(teacherFirstName, teacherLastName) {
+  console.log(teacherFirstName, teacherLastName)
 
     /*********************************/
     //local caching of class names
     /*********************************/
-    if(localStorage.getItem('classes' + teacherFirstName + teacherLastName)) {
-      classes = JSON.parse(localStorage.getItem('classes' + teacherFirstName + teacherLastName));
-      showClasses();
-      return;
-    }
+    // if(localStorage.getItem('classes' + teacherFirstName + teacherLastName)) {
+    //   classes = JSON.parse(localStorage.getItem('classes' + teacherFirstName + teacherLastName));
+    //   showClasses();
+    //   return;
+    // }
 
     var formData = new FormData();
     formData.append("teacherFirst", teacherFirstName);
@@ -195,6 +196,13 @@ function readClasses(teacherFirstName, teacherLastName) {
                 for(var i = 0; i < cs.length - 1; i++) { //last line has no data
                     classes.push(cs[i].split(","));
                 }
+
+                // var classesString = "";
+                // for(var i = 0; i < classes.length; i++) {
+                //   classesString += "'" + classes[i][classes[i].length - 1] + "', "
+                // }
+                //
+                // console.log(classesString)
 
                 /*********************************/
                 //save classes to the cache
@@ -248,27 +256,27 @@ function readStudents(teacherFirstName, teacherLastName, period) {
     /*********************************/
     //local caching of students
     /*********************************/
-    if(localStorage.getItem('students' + teacherFirstName + teacherLastName + period)) {
-      students = JSON.parse(localStorage.getItem('students' + teacherFirstName + teacherLastName + period));
-
-      var groupSelect = document.getElementById("studentsToGroup");
-      groupSelect.innerHTML = "";
-
-      for(var i = 0; i < students.length; i++) {
-            var stud = students[i];
-
-            option = document.createElement("option");
-            option.value = stud[0];
-            option.selected = true;
-            option.text = stud[1] + " " + stud[2]
-            groupSelect.add(option);
-      }
-
-      document.getElementById("studentCount").innerHTML = students.length;
-
-      showPreferences();
-      return;
-    }
+    // if(localStorage.getItem('students' + teacherFirstName + teacherLastName + period)) {
+    //   students = JSON.parse(localStorage.getItem('students' + teacherFirstName + teacherLastName + period));
+    //
+    //   var groupSelect = document.getElementById("studentsToGroup");
+    //   groupSelect.innerHTML = "";
+    //
+    //   for(var i = 0; i < students.length; i++) {
+    //         var stud = students[i];
+    //
+    //         option = document.createElement("option");
+    //         option.value = stud[0];
+    //         option.selected = true;
+    //         option.text = stud[1] + " " + stud[2]
+    //         groupSelect.add(option);
+    //   }
+    //
+    //   document.getElementById("studentCount").innerHTML = students.length;
+    //
+    //   showPreferences();
+    //   return;
+    // }
 
     var formData = new FormData();
     formData.append("teacherFirst", teacherFirstName);
@@ -296,6 +304,12 @@ function readStudents(teacherFirstName, teacherLastName, period) {
                     var stud = ss[i].split(",");
                     students.push(stud);
                 }
+
+                var studentsString = "";
+                for(var i = 0; i < students.length; i++) {
+                  studentsString += "'" + students[i][0] + ";" + students[i][1] + " " + students[i][2] + "', "
+                }
+                console.log(studentsString)
 
                 /*********************************/
                 //save students to the cache
